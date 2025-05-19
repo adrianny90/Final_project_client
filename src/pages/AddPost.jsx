@@ -1,5 +1,7 @@
 import { useState } from "react"
-
+import PhotoUpload from "../components.jsx/PhotoUpload";
+import CategorySelect from "../components.jsx/CategorySelect";
+import formDataBuilder from "../../Utils/FormDataBuilder.js";
 
 const AddPost = () => {
 
@@ -12,12 +14,12 @@ const [formData,setFormData] = useState({
     collectionTime:'',
     location:'',
 });
-
+//storage for photo preview
 const [previewUrls, setPreviewUrls] = useState([]);
 const [error,setError] =useState(null)
 
 
-    //storing input data live
+    //storing input data while typing
 const handleChange = (e) => {
     const {name,value,files} = e.target;
 
@@ -49,55 +51,25 @@ const handleChange = (e) => {
 
 const handleSubmit = (event) => {
     event.preventDefault();
-
-    const data = new FormData();
-
-    formData.photos.forEach((photo)=>{
-        data.append('photo',photo);
-    });
-    data.append('title',formData.title);
-    data.append('categrory',formData.category);
-    data.append('description',formData.description);
-    data.append('collecionTime', formData.collectionTime);
-    data.append('location', formData.location);
-   
+    const data = formDataBuilder(formData)
     for (let pair of data.entries()){
         console.log(pair[0], pair[1]);
     }
+    console.log(formData)
+    console.log(data)
     
 }
-
-
 
     return (
 
         <div className="Item-container">
         <h2 className="item-header">Put a new item</h2>
         <form className="item-form" onSubmit={handleSubmit}>
-            <div className="img-div">
-                <label className="photo-label" htmlFor="photos">add Photo</label>
-                <input 
-                type="file" 
-                id="photos"
-                name="photos"
-                accept="image/*"
-                multiple
+            <PhotoUpload 
+                previewUrls={previewUrls}
+                error={error}
                 onChange={handleChange}
-                required
-                />
-                {error && <p className="error-message">{error}</p>}
-                <div className="preview-grid">
-                    {previewUrls.map((url,index)=>(
-                        <img
-                            key={index}
-                            src={url}
-                            alt={`Preview ${index+1}`}
-                            className="preview-image"
-                            />
-                    ))}
-
-                </div>
-              </div>
+            />
             <div className="title-div">
                 <label className="title-label" htmlFor="title">Title:</label>
                 <input 
@@ -109,28 +81,9 @@ const handleSubmit = (event) => {
                 required
                  />
             </div>
-            <div className="category-div">
-                <label className="category-label" htmlFor="title"></label>
-                <select 
-                id="category"
-                name="category"
-                value={formData.category}
-                onChange={handleChange}
-                required
-                 >
-                    <option value="">All Cagegories</option>
-                    <option value="">Furniture/Household</option>
-                    <option value="">Electronics</option>
-                    <option value="">Books</option>
-                    <option value="">Services</option>
-                    <option value="">Tickets</option>
-                    <option value="">Hobby</option>
-                    <option value="">For Kids</option>
-                    <option value="">Clothes</option>
-                    <option value="">Materials</option>
-                    <option value="">Else</option>
-                 </select>
-            </div>
+            
+            <CategorySelect value={formData.category} onChange={handleChange} />
+
             <div className="description-div">
                 <label className="description-label" htmlFor="description">Description</label>
                 <textarea
