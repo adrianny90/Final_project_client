@@ -5,33 +5,45 @@ const AddPost = () => {
 
     //storage for formdata
 const [formData,setFormData] = useState({
-    photo: null,
+    photos: [],
     title: '',
     description:'',
     collectionTime:'',
     location:'',
 });
 
-const [previewUrl, setPreviewUrl] = useState(null);
+const [previewUrls, setPreviewUrls] = useState([]);
+const [error,setError] =useState(null)
+
 
     //storing input data live
 const handleChange = (e) => {
     const {name,value,files} = e.target;
 
-    if(files &&files[0]){
-        const file = files[0];
-        setFormData((prev)=> ({
-            ...prev,
-            [name]: file,
-        }));
-        setPreviewUrl(URL.createObjectURL(file));
-    }
+    if(name==='photos'){
+        const selectedFiles = Array.from(files)
+
+        if(formData.photos.length + selectedFiles.length > 5) {
+            setError('Max 5 photos possible');
+            return
+        }
+        setError(null);
+
+        const newUrls = selectedFiles.map((file)=> URL.createObjectURL(file));
+        
+    
     setFormData((prev)=>({
         ...prev,
-        [name]: value,
+        photos: [...prev.photos,...selectedFiles]
+    }));
+    setPreviewUrls(prev => [...prev, ...newUrls]);
+} else {
+    setFormData((prev)=> ({
+        ...prev,
+        [name] : value,
     }))
-    console.log(formData)
 }
+};
 
 const handleSubmit = () => {
     console.log(formData.title)
@@ -45,24 +57,29 @@ const handleSubmit = () => {
         <h2 className="item-header">Put a new item</h2>
         <form className="item-form" onSubmit={handleSubmit}>
             <div className="img-div">
-                <label className="photo-label" htmlFor="img">add Photo</label>
+                <label className="photo-label" htmlFor="photos">add Photo</label>
                 <input 
                 type="file" 
-                id="img"
-                name="img"
+                id="photos"
+                name="photos"
                 accept="image/*"
+                multiple
                 onChange={handleChange}
                 required
                 />
-                {previewUrl && (
-                    <img 
-                    src={previewUrl} 
-                    alt="Preview"
-                    className="preview-image" 
-                    
-                    />
-                )}
-            </div>
+                {error && <p className="error-message">{error}</p>}
+                <div className="preview-grid">
+                    {previewUrls.map((url,index)=>(
+                        <img
+                            key={index}
+                            src={url}
+                            alt={`Preview ${index+1}`}
+                            className="preview-image"
+                            />
+                    ))}
+
+                </div>
+              </div>
             <div className="title-div">
                 <label className="title-label" htmlFor="title">Title:</label>
                 <input 
