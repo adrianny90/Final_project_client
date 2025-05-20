@@ -1,7 +1,9 @@
 import { useState } from "react"
 import PhotoUpload from "../components.jsx/PhotoUpload";
 import CategorySelect from "../components.jsx/CategorySelect";
-import formDataBuilder from "../../Utils/FormDataBuilder.js";
+// import formDataBuilder from "../Utils/formDataBuilder.js";
+import cloudinaryUpload from "../../Utils/cloudinarayUpload.js";
+import axios from "axios";
 
 const AddPost = () => {
 
@@ -17,6 +19,7 @@ const [formData,setFormData] = useState({
 //storage for photo preview
 const [previewUrls, setPreviewUrls] = useState([]);
 const [error,setError] =useState(null)
+const [isSubmitting, setIsSubitting] = useState(false)
 
 
     //storing input data while typing
@@ -24,7 +27,7 @@ const handleChange = (e) => {
     const {name,value,files} = e.target;
 
     if(name==='photos'){
-        const selectedFiles = Array.from(files) //creating array from uploaded img, each img is an element in the array
+        const selectedFiles = Array.from(files) //creating array from uploaded imgs, each img is an element in the array
 
         //upload limit = 5 photos
         if(formData.photos.length + selectedFiles.length > 5) {
@@ -49,14 +52,44 @@ const handleChange = (e) => {
 }
 };
 
-const handleSubmit = (event) => {
+const handleSubmit = async(event) => {
     event.preventDefault();
-    const data = formDataBuilder(formData)
-    for (let pair of data.entries()){
-        console.log(pair[0], pair[1]);
+
+    try {
+        setIsSubitting(true);
+
+        const uploadedPhotoUrls = await cloudinaryUpload(formData.photos);
+
+        const dataToSend = {
+            title: formData.title,
+            category: formData.category,
+            description: formData.description,
+            collectionTime:formData.collectionTime,
+            location: formData.location,
+            photos: uploadedPhotoUrls,
+        };
+
+            console.log('data to send',dataToSend)
+        const response = await axios.post('http://localhost:3000/items',dataToSend)
+            // reset form after sendeing data
+        setFormData({
+            photos: [],
+            title: '',
+            category:'',
+            description:'',
+            collectionTime:'',
+            location:'',
+        });
+        setPreviewUrls([]);
+    } catch (error) {
+        console.log('Error while submitting', error);
+        setError('Something went wrong while submitting')
+    }  finally {
+        setIsSubitting(false);
     }
-    console.log(formData)
-    console.log(data)
+    // checking the key-values pairs
+
+
     
 }
 
@@ -65,11 +98,7 @@ const handleSubmit = (event) => {
         <div className="Item-container">
         <h2 className="item-header">Put a new item</h2>
         <form className="item-form" onSubmit={handleSubmit}>
-            <PhotoUpload 
-                previewUrls={previewUrls}
-                error={error}
-                onChange={handleChange}
-            />
+            <PhotoUpload  previewUrls={previewUrls} error={error} onChange={handleChange}  />
             <div className="title-div">
                 <label className="title-label" htmlFor="title">Title:</label>
                 <input 
@@ -117,7 +146,7 @@ const handleSubmit = (event) => {
                 required
                 />
             </div>
-            <button className="submit-button" type="submit">submit offer</button>
+            <button className="submit-button" type="submit" disabled={isSubmitting}>{isSubmitting?'Submitting...':'Submit offer'}submit offer</button>
         </form>
         
         </div>

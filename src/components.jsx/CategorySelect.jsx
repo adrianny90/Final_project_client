@@ -10,7 +10,7 @@ const CategorySelect = ({value, onChange}) => (
                 required
                  >
                     <option value="">All Cagegories</option>
-                    <option value="furniture/Household">Furniture/Household</option>
+                    <option value="furnitureHousehold">Furniture/Household</option>
                     <option value="electronics">Electronics</option>
                     <option value="books">Books</option>
                     <option value="services">Services</option>
