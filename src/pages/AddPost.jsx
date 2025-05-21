@@ -4,7 +4,10 @@ import CategorySelect from "../components.jsx/CategorySelect";
 // import formDataBuilder from "../Utils/formDataBuilder.js";
 import cloudinaryUpload from "../../Utils/cloudinarayUpload.js";
 import axios from "axios";
+
 import Spinner from "../components.jsx/Spinner.jsx";
+
+
 
 const AddPost = () => {
 
@@ -21,7 +24,10 @@ const [formData,setFormData] = useState({
 const [previewUrls, setPreviewUrls] = useState([]);//storage for photo preview
 const [error,setError] =useState(null)
 const [isSubmitting, setIsSubitting] = useState(false)
+
 const [successMsg,setSuccessMsg] = useState('');
+
+
 
 
 
@@ -84,7 +90,9 @@ const handleSubmit = async(event) => {
             location:'',
         });
         setPreviewUrls([]);
+
         setSuccessMsg('Item submitted succesfully');
+
     } catch (error) {
         console.log('Error while submitting', error);
         setError('Something went wrong while submitting')
@@ -154,7 +162,11 @@ const handleSubmit = async(event) => {
                 required
                 />
             </div>
+
             <button className="submit-button" type="submit" disabled={isSubmitting}>{isSubmitting?'Submitting...':'Submit offer'}</button>
+
+      
+
         </form>
         <Spinner />
         {isSubmitting && <Spinner />}
