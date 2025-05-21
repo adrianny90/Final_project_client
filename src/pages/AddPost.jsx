@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import PhotoUpload from "../components.jsx/PhotoUpload";
 import CategorySelect from "../components.jsx/CategorySelect";
 // import formDataBuilder from "../Utils/formDataBuilder.js";
@@ -6,6 +6,7 @@ import cloudinaryUpload from "../../Utils/cloudinarayUpload.js";
 import axios from "axios";
 
 import Spinner from "../components.jsx/Spinner.jsx";
+// import { useContext, createContext } from "react";
 
 
 
@@ -18,9 +19,18 @@ const [formData,setFormData] = useState({
     category:'',
     description:'',
     collectionTime:'',
-    location:'',
+    address:{
+        street:'',
+        houseStreet:'',
+        postalCode:'',
+        city:'',
+        location:{
+           type:'Point',
+           coordinates:[],
+        },
+    },
 });
-
+const user = {id:'12345'}
 const [previewUrls, setPreviewUrls] = useState([]);//storage for photo preview
 const [error,setError] =useState(null)
 const [isSubmitting, setIsSubitting] = useState(false)
@@ -29,7 +39,21 @@ const [successMsg,setSuccessMsg] = useState('');
 
 
 
-
+useEffect(()=>{
+    navigator.geolocation.getCurrentPosition((position)=> {
+        const {latitude, longitude} = position.coords;
+        setFormData(prev=> ({
+            ...prev,
+            address: {
+                ...prev.address,
+                location: {
+                    type: 'Point',
+                    coordinates: [longitude,latitude],
+                }
+            }
+        }))
+    })
+},[])
 
     //storing input data while typing
 const handleChange = (e) => {
@@ -53,7 +77,18 @@ const handleChange = (e) => {
         photos: [...prev.photos,...selectedFiles]
     }));
     setPreviewUrls(prev => [...prev, ...newUrls]);//showing existing and new photos in preview
-} else {
+} else if (name.startsWith('address.')){
+    const field = name.split('.')[1];
+    setFormData(prev => ({
+        ...prev,
+        address: {
+            ...prev.address,
+            [field]: value,
+        }
+    }));
+}
+
+else {
     setFormData((prev)=> ({
         ...prev,
         [name] : value,
@@ -61,7 +96,7 @@ const handleChange = (e) => {
 }
 };
 
-const handleSubmit = async(event) => {
+const handleSubmit = async (event) => {
     event.preventDefault();
 
     try {
@@ -71,23 +106,35 @@ const handleSubmit = async(event) => {
 
         const dataToSend = {
             title: formData.title,
+            userId:user?.id || '12345',
             category: formData.category,
             description: formData.description,
             collectionTime:formData.collectionTime,
-            location: formData.location,
+            // location: formData.location,
+            address: formData.address,
             photos: uploadedPhotoUrls,
         };
 
-            console.log('data to send',dataToSend)
-        const response = await axios.post('http://localhost:3000/items',dataToSend)
+            console.log('data to send:',dataToSend)
+
+        const response = await axios.post('http://localhost:3000/items',dataToSend);
             // reset form after sendeing data
-        setFormData({
-            photos: [],
-            title: '',
-            category:'',
-            description:'',
-            collectionTime:'',
-            location:'',
+            setFormData({
+                photos: [],
+                title: '',
+                category: '',
+                description: '',
+                collectionTime: '',
+                address: {
+                  street: '',
+                  houseStreet: '',
+                  postalCode: '',
+                  city: '',
+                  location: {
+                    type: "Point",
+                    coordinates: [],
+                  }
+                }
         });
         setPreviewUrls([]);
 
@@ -150,25 +197,54 @@ const handleSubmit = async(event) => {
                 onChange={handleChange}
                 />
             </div>
-            <div className="lacoation-div">
-                <label htmlFor="location">Where to pick</label>
-                <input 
-                type="text" 
-                id="location"
-                name="location"
-                value={formData.location}
-                onChange={handleChange}
-                disabled={isSubmitting}
-                required
-                />
-            </div>
 
+            <div className="address-group">
+          <label htmlFor="address.street">Street:</label>
+          <input
+            type="text"
+            id="address.street"
+            name="address.street"
+            value={formData.address.street}
+            onChange={handleChange}
+            disabled={isSubmitting}
+          />
+
+          <label htmlFor="address.houseStreet">House number:</label>
+          <input
+            type="text"
+            id="address.houseStreet"
+            name="address.houseStreet"
+            value={formData.address.houseStreet}
+            onChange={handleChange}
+            disabled={isSubmitting}
+          />
+
+          <label htmlFor="address.postalCode">Postal Code:</label>
+          <input
+            type="text"
+            id="address.postalCode"
+            name="address.postalCode"
+            value={formData.address.postalCode}
+            onChange={handleChange}
+            disabled={isSubmitting}
+          />
+
+          <label htmlFor="address.city">City:</label>
+          <input
+            type="text"
+            id="address.city"
+            name="address.city"
+            value={formData.address.city}
+            onChange={handleChange}
+            disabled={isSubmitting}
+          />
+       
             <button className="submit-button" type="submit" disabled={isSubmitting}>{isSubmitting?'Submitting...':'Submit offer'}</button>
 
       
 
         </form>
-        <Spinner />
+        {/* <Spinner /> */}
         {isSubmitting && <Spinner />}
         {successMsg && <p className="succes-message">{successMsg}</p>}
         
