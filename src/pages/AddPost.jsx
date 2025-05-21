@@ -5,6 +5,10 @@ import CategorySelect from "../components.jsx/CategorySelect";
 import cloudinaryUpload from "../../Utils/cloudinarayUpload.js";
 import axios from "axios";
 
+import Spinner from "../components.jsx/Spinner.jsx";
+
+
+
 const AddPost = () => {
 
     //storage for formdata
@@ -16,10 +20,15 @@ const [formData,setFormData] = useState({
     collectionTime:'',
     location:'',
 });
-//storage for photo preview
-const [previewUrls, setPreviewUrls] = useState([]);
+
+const [previewUrls, setPreviewUrls] = useState([]);//storage for photo preview
 const [error,setError] =useState(null)
 const [isSubmitting, setIsSubitting] = useState(false)
+
+const [successMsg,setSuccessMsg] = useState('');
+
+
+
 
 
     //storing input data while typing
@@ -32,7 +41,7 @@ const handleChange = (e) => {
         //upload limit = 5 photos
         if(formData.photos.length + selectedFiles.length > 5) {
             setError('Max 5 photos possible');
-            return
+            return;
         }
         setError(null);
 
@@ -81,6 +90,9 @@ const handleSubmit = async(event) => {
             location:'',
         });
         setPreviewUrls([]);
+
+        setSuccessMsg('Item submitted succesfully');
+
     } catch (error) {
         console.log('Error while submitting', error);
         setError('Something went wrong while submitting')
@@ -107,6 +119,7 @@ const handleSubmit = async(event) => {
                 name="title"
                 value={formData.title}
                 onChange={handleChange}
+                disabled={isSubmitting}
                 required
                  />
             </div>
@@ -121,6 +134,7 @@ const handleSubmit = async(event) => {
                 name="description"
                 value={formData.description}
                 onChange={handleChange}
+                disabled={isSubmitting}
                 required
                 rows={8}
                 />
@@ -132,6 +146,7 @@ const handleSubmit = async(event) => {
                 id="collectionTime"
                 name="collectionTime"
                 value={formData.collectionTime}
+                disabled={isSubmitting}
                 onChange={handleChange}
                 />
             </div>
@@ -143,11 +158,19 @@ const handleSubmit = async(event) => {
                 name="location"
                 value={formData.location}
                 onChange={handleChange}
+                disabled={isSubmitting}
                 required
                 />
             </div>
-            <button className="submit-button" type="submit" disabled={isSubmitting}>{isSubmitting?'Submitting...':'Submit offer'}submit offer</button>
+
+            <button className="submit-button" type="submit" disabled={isSubmitting}>{isSubmitting?'Submitting...':'Submit offer'}</button>
+
+      
+
         </form>
+        <Spinner />
+        {isSubmitting && <Spinner />}
+        {successMsg && <p className="succes-message">{successMsg}</p>}
         
         </div>
     )
