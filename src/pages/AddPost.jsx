@@ -72,7 +72,7 @@ const handleSubmit = async(event) => {
             photos: uploadedPhotoUrls,
         };
 
-            console.log('data to send',dataToSend)
+            console.log('data to send:',dataToSend)
         const response = await axios.post('http://localhost:3000/items',dataToSend)
             // reset form after sendeing data
         setFormData({

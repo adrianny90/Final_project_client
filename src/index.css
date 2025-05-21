@@ -137,9 +137,9 @@ body {
     height: 120px;
     width:120px;
     border: 6px solid;
-    border-color: rgb(46, 214, 12) transparent rgb(230, 132, 14) transparent;
+    border-color: rgb(119, 236, 17)blue rgb(230, 132, 14) rgb(255, 255, 0);
     border-radius: 50%;
-    animation: spin 1.3s ease infinite;
+    animation: spin 1.2s ease infinite;
   }
 
   @keyframes spin {
