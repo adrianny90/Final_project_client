@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { MapPin, Calendar } from "lucide-react";
 
 const formatDate = (dateString) => {
@@ -14,10 +15,17 @@ const ItemCard = ({ item }) => {
     <div className="bg-white rounded-xl overflow-hidden text-black">
       <img src={item.photos} alt={item.title} className="h-60 w-full" />
       <div className="p-2">
-        <h2 className="font-bold">{item.title}</h2>
+        <Link to={`http://localhost:5173/get/${item.id}`}>
+          <h2 className="font-bold">
+            {item.title.length > 30
+              ? item.title.slice(0, 30) + "..."
+              : item.title}
+          </h2>
+        </Link>
 
         <div className="flex items-center text-sm text-gray-700 gap-1">
           <MapPin className="w-4 h-4 text-gray-700" />
+          <span>{item.address.postalCode}</span>
           <span>{item.address.city}</span>
         </div>
 
