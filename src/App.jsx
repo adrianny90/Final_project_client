@@ -11,20 +11,21 @@ import GetItems from "./pages/GetItems.jsx";
 
 function App() {
   return (
-    <Routes>
-      <Route path="/" element={<MainLayout />}>
-        <Route index element={<HomePage />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Register />} />
-        <Route path="/verify/:token" element={<Verify />} />
-        <Route element={<ProtectedLayout />}>
-          <Route path="/give" element={<AddPost />} />
+    <Router>
+      <Routes>
+        <Route path="/" element={<MainLayout />}>
+          <Route index element={<HomePage />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Register />} />
+          <Route path="/verify/:token" element={<Verify />} />
+          <Route element={<ProtectedLayout />}>
+            <Route path="/give" element={<AddPost />} />
+          </Route>
+          <Route path="/get" element={<GetItems />} />
+          <Route path="*" element={<NotFound />} />
         </Route>
-
-        <Route path="/get" element={<GetItems />} />
-        <Route path="*" element={<NotFound />} />
-      </Route>
-    </Routes>
+      </Routes>
+    </Router>
   );
 }
 
