@@ -7,24 +7,24 @@ import Login from "./pages/Login.jsx";
 import NotFound from "./pages/NotFound.jsx";
 import ProtectedLayout from "./layouts/ProtectedLayout.jsx";
 import Verify from "./pages/Verify.jsx";
+import GetItems from "./pages/GetItems.jsx";
 
 function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<MainLayout />}>
-          <Route index element={<HomePage />} />
-
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Register />} />
-          <Route path="/verify/:token" element={<Verify />} />
-          <Route element={<ProtectedLayout />}>
-            <Route path="/give" element={<AddPost />} />
-          </Route>
-          <Route path="*" element={<NotFound />} />
+    <Routes>
+      <Route path="/" element={<MainLayout />}>
+        <Route index element={<HomePage />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Register />} />
+        <Route path="/verify/:token" element={<Verify />} />
+        <Route element={<ProtectedLayout />}>
+          <Route path="/give" element={<AddPost />} />
         </Route>
-      </Routes>
-    </Router>
+
+        <Route path="/get" element={<GetItems />} />
+        <Route path="*" element={<NotFound />} />
+      </Route>
+    </Routes>
   );
 }
 
