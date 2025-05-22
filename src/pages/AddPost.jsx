@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import PhotoUpload from "../components/PhotoUpload";
 import CategorySelect from "../components/CategorySelect";
+import Map from "../components/Map.jsx";
 // import formDataBuilder from "../utils/formDataBuilder.js";
 import cloudinaryUpload from "../utils/cloudinarayUpload.js";
 import axios from "axios";
@@ -251,7 +252,12 @@ const AddPost = () => {
       {/* <Spinner /> */}
       {isSubmitting && <Spinner />}
       {successMsg && <p className="succes-message">{successMsg}</p>}
+      <div className="map-div">
+
+                <Map />
+      </div>
     </div>
+    
   );
 };
 
