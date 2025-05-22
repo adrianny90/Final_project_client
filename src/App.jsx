@@ -6,6 +6,7 @@ import Register from "./pages/Register.jsx";
 import Login from "./pages/Login.jsx";
 import NotFound from "./pages/NotFound.jsx";
 import ProtectedLayout from "./layouts/ProtectedLayout.jsx";
+import Verify from "./pages/Verify.jsx";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
 
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Register />} />
+          <Route path="/verify/:token" element={<Verify />} />
           <Route element={<ProtectedLayout />}>
             <Route path="/give" element={<AddPost />} />
           </Route>

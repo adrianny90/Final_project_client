@@ -83,7 +83,7 @@ const Login = () => {
       </label>
       <small>
         Don&apos;t have an account?{" "}
-        <Link to="/register" className="text-primary hover:underline">
+        <Link to="/signup" className="text-primary hover:underline">
           Register!
         </Link>
       </small>

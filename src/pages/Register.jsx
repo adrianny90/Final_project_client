@@ -31,7 +31,9 @@ const Register = () => {
 
       setLoading(true);
       await signUp({ firstName, lastName, email, password });
-      toast.success("Registration successful. Pls sign in!");
+      toast.success(
+        "Registration successful. Please check email and verify user!"
+      );
       navigate("/login");
     } catch (error) {
       toast.error(error.message);

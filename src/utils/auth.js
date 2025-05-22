@@ -41,3 +41,14 @@ export const me = async () => {
   const data = await res.json();
   return data;
 };
+
+export const verifyUser = async (token) => {
+  const res = await fetch(`http://localhost:3000/auth/verify`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(token),
+  });
+  if (!res) throw new Error("Error while signing up");
+  const data = await res.json();
+  return data;
+};
