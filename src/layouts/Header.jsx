@@ -15,6 +15,9 @@ const Header = () => {
             <Link to="/give" className="btn border border-gray-300 rounded-lg">
               Give Away
             </Link>
+            <Link to="/map" className="btn border border-gray-300 rounded-lg">
+              Map
+            </Link>
           </div>
           <div className="space-x-4">
             <Link

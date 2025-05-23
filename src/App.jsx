@@ -3,6 +3,7 @@ import MainLayout from "./layouts/MainLayout.jsx";
 import HomePage from "./pages/HomePage.jsx";
 import AddPost from "./pages/AddPost.jsx";
 import GetItems from "./pages/GetItems.jsx";
+import ItemMap from "./pages/ItemMap.jsx";
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
           <Route index element={<HomePage />} />
           <Route path="/give" element={<AddPost />} />
           <Route path="/get" element={<GetItems />} />
+          <Route path="/map" element={<ItemMap />} />
         </Route>
       </Routes>
     </Router>
