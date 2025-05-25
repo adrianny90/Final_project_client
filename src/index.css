@@ -180,3 +180,14 @@ body {
   height: 100%;
 }
 
+.highlight-marker {
+  filter: hue-rotate(120deg) drop-shadow(0 0 4px rgba(0, 0, 0, 0.3));
+}
+
+.map-container {
+  min-height: 400px; /* Fallback für kleine Screens */
+}
+
+.leaflet-popup-content {
+  min-width: 200px;
+}

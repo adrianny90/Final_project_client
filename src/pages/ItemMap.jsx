@@ -9,19 +9,24 @@ const ItemMap = () => {
     const [position,setPosition] = useState([52.5200, 13.4050])
     const [selectedCategory,setSelectedCategory] = useState(null);
     const [loading,setLoading] = useState(false);
-    const [item,setItem] = useState([])
+    const [items,setItems] = useState([])
+    const [selectedItem, setSelectedItem] = useState(null);
+    const [searchQuery,setSearchQuery] = useState("");
+
 
     useEffect(()=> {
         if(selectedCategory){
             fetchItemsByCategory();
+        } else {
+            setItems([])
         }
     },[selectedCategory]);
 
     const fetchItemsByCategory = async() => {
         try {
             setLoading(true);
-            const res = await axios.get(`http://localhost:3000/items/category?${selectedCategory}`);
-            setItem(res.data);
+            const res = await axios.get(`http://localhost:3000/items/category?=${selectedCategory}`);
+            setItems(res.data);
 
         } catch (error) {
             console.error('Error fetching items:', error);
@@ -29,13 +34,27 @@ const ItemMap = () => {
             setLoading(false)
         }   
     };
+    
+    const handleItemSelect = (item) => {
+        setSelectedItem(item);
+        if(item?.location?.coordinates){
+            setPosition([item.location.coordinates[1],item.location.coordinates[0]]);
+        }
+    };
+    const filteredItems = items.filter(item => 
+        item.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        item.description?.toLowerCase().includes(searchQuery.toLowerCase())
+    );
 
    return (
 
-<div className="mapPage-Container bg-amber-200">
+<div className="mapPage-Container bg-green-200">
     
     <fieldset className="fieldset-map">
-        <input className="category-div" type="text" placeholder="what do you look for" />
+        <input className="category-div" type="text" placeholder="what do you look for"
+            value={searchQuery}
+            onChange={(e)=> setSearchQuery(e.target.value)}
+        />
         <CategorySelect 
         selectedCategory={selectedCategory} 
         onCategoryChange={setSelectedCategory}
@@ -44,7 +63,23 @@ const ItemMap = () => {
     </fieldset>
     
     <div className="map">
-            <Map items={item} center= {position}/>
+            <Map items={filteredItems} 
+            center= {position}
+            selectedItem={selectedItem}
+            onItemSelect={handleItemSelect}
+            />
+            {selectedItem && (
+                  <div className="absolute bottom-4 left-4 right-4 bg-white p-4 rounded shadow-lg z-10">
+                  <h3 className="font-bold">{selectedItem.name}</h3>
+                  <p>{selectedItem.description}</p>
+                  <button 
+                      onClick={() => setSelectedItem(null)}
+                      className="mt-2 text-blue-500 hover:underline"
+                  >
+                      Close
+                  </button>
+              </div>
+            )}
 
     </div>
 
