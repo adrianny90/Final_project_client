@@ -5,50 +5,57 @@ const Header = () => {
   const { user, logOut } = useAuth();
 
   return (
-    <header className="text-black">
-      <nav className="container mx-auto px-4 py-4">
-        <div className="flex justify-between items-center">
-          <Link to="/" className="text-xl font-bold">
-            LOGO
+    <header className="bg-gray-800 text-white shadow-lg">
+      <nav className="container mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
+        <Link to="/" className="text-2xl font-bold">
+          <img
+            src="/image/img.jpg"
+            alt="BerlinGive Logo"
+            className="w-32 h-16  mb-4 transition-transform duration-300 hover:rotate-6 drop-shadow-md border border-white/30 rounded-sm"
+          />
+        </Link>
+        <div className="flex flex-wrap justify-center items-center gap-3">
+          <Link
+            to="/get"
+            className="px-4 py-2 bg-gray-600 text-white font-semibold rounded-lg hover:bg-green-500 hover:text-gray-900 transition-colors duration-300"
+          >
+            Get Free
           </Link>
-          <div className="space-x-4">
-            <Link to="/get" className="btn border border-gray-300 rounded-lg">
-              Get Free
+          <Link
+            to="/give"
+            className="px-4 py-2 bg-gray-600 text-white font-semibold rounded-lg hover:bg-green-500 hover:text-gray-900 transition-colors duration-300"
+          >
+            Give Away
+          </Link>
+        </div>
+        <div className="flex flex-wrap justify-center items-center gap-3">
+          {user ? (
+            <span className="px-4 py-2 text-white font-medium">
+              Hi, {user.firstName}
+            </span>
+          ) : (
+            <Link
+              to="/login"
+              className="px-4 py-2 bg-gray-600 text-white font-semibold rounded-full hover:bg-green-500 hover:text-gray-900 transition-colors duration-300"
+            >
+              Login
             </Link>
-            <Link to="/give" className="btn border border-gray-300 rounded-lg">
-              Give Away
+          )}
+          {user ? (
+            <button
+              onClick={logOut}
+              className="px-4 py-2 bg-gray-600 text-white font-semibold rounded-full hover:bg-green-500 hover:text-gray-900 transition-colors duration-300"
+            >
+              Logout
+            </button>
+          ) : (
+            <Link
+              to="/signup"
+              className="px-4 py-2 bg-gray-600 text-white font-semibold rounded-full hover:bg-green-500 hover:text-gray-900 transition-colors duration-300"
+            >
+              Sign up
             </Link>
-          </div>
-          <div className="">
-            {user ? (
-              <span>{`Hi, ${user.firstName}`}</span>
-            ) : (
-              <Link
-                to="/login"
-                className="btn border border-gray-300 rounded-full"
-              >
-                Login
-              </Link>
-            )}
-          </div>
-          <div className="">
-            {user ? (
-              <span
-                onClick={logOut}
-                className="btn border border-gray-300 rounded-full"
-              >
-                Logout
-              </span>
-            ) : (
-              <Link
-                to="/signup"
-                className="btn border border-gray-300 rounded-full"
-              >
-                {" "}
-                Sign up
-              </Link>
-            )}
-          </div>
+          )}
         </div>
       </nav>
     </header>

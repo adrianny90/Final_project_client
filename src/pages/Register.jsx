@@ -46,46 +46,48 @@ const Register = () => {
 
   return (
     <form
-      className="my-5 md:w-1/2 mx-auto flex flex-col gap-3"
+      className="min-h-screen bg-gray-900 flex items-center flex-col p-4"
       onSubmit={handleSubmit}
     >
-      <div className="flex justify-between gap-2">
-        <label className="grow input input-bordered flex items-center gap-2">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 16 16"
-            fill="currentColor"
-            className="h-4 w-4 opacity-70"
-          >
-            <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM12.735 14c.618 0 1.093-.561.872-1.139a6.002 6.002 0 0 0-11.215 0c-.22.578.254 1.139.872 1.139h9.47Z" />
-          </svg>
-          <input
-            name="firstName"
-            value={firstName}
-            onChange={handleChange}
-            className="grow"
-            placeholder="First name"
-          />
-        </label>
-        <label className="grow input input-bordered flex items-center gap-2">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 16 16"
-            fill="currentColor"
-            className="h-4 w-4 opacity-70"
-          >
-            <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM12.735 14c.618 0 1.093-.561.872-1.139a6.002 6.002 0 0 0-11.215 0c-.22.578.254 1.139.872 1.139h9.47Z" />
-          </svg>
-          <input
-            name="lastName"
-            value={lastName}
-            onChange={handleChange}
-            className="grow"
-            placeholder="Last name"
-          />
-        </label>
-      </div>
-      <label className="input input-bordered flex items-center gap-2">
+      <p className="text-3xl mt-6">Please sign up!</p>
+
+      <label className="input input-bordered flex items-center mt-6 m-4 gap-2 bg-gray-700 border-gray-600">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 16 16"
+          fill="currentColor"
+          className="h-4 w-4 opacity-70"
+        >
+          <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM12.735 14c.618 0 1.093-.561.872-1.139a6.002 6.002 0 0 0-11.215 0c-.22.578.254 1.139.872 1.139h9.47Z" />
+        </svg>
+        <input
+          name="firstName"
+          value={firstName}
+          onChange={handleChange}
+          className="grow text-white placeholder-gray-400"
+          placeholder="First name"
+        />
+      </label>
+
+      <label className="input input-bordered flex items-center m-4 gap-2 bg-gray-700 border-gray-600">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 16 16"
+          fill="currentColor"
+          className="h-4 w-4 opacity-70"
+        >
+          <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM12.735 14c.618 0 1.093-.561.872-1.139a6.002 6.002 0 0 0-11.215 0c-.22.578.254 1.139.872 1.139h9.47Z" />
+        </svg>
+        <input
+          name="lastName"
+          value={lastName}
+          onChange={handleChange}
+          className="grow text-white placeholder-gray-400"
+          placeholder="Last name"
+        />
+      </label>
+
+      <label className="input input-bordered flex items-center gap-2 m-4 bg-gray-700 border-gray-600">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 16 16"
@@ -100,63 +102,68 @@ const Register = () => {
           value={email}
           onChange={handleChange}
           type="email"
-          className="grow"
+          className="grow text-white placeholder-gray-400"
           placeholder="Email"
         />
       </label>
-      <div className="flex justify-between gap-2">
-        <label className="grow input input-bordered flex items-center gap-2">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 16 16"
-            fill="currentColor"
-            className="h-4 w-4 opacity-70"
-          >
-            <path
-              fillRule="evenodd"
-              d="M14 6a4 4 0 0 1-4.899 3.899l-1.955 1.955a.5.5 0 0 1-.353.146H5v1.5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1-.5-.5v-2.293a.5.5 0 0 1 .146-.353l3.955-3.955A4 4 0 1 1 14 6Zm-4-2a.75.75 0 0 0 0 1.5.5.5 0 0 1 .5.5.75.75 0 0 0 1.5 0 2 2 0 0 0-2-2Z"
-              clipRule="evenodd"
-            />
-          </svg>
-          <input
-            name="password"
-            value={password}
-            onChange={handleChange}
-            type="password"
-            className="grow"
-            placeholder="Password"
+
+      <label className="input input-bordered flex items-center gap-2 m-4 bg-gray-700 border-gray-600">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 16 16"
+          fill="currentColor"
+          className="h-4 w-4 opacity-70"
+        >
+          <path
+            fillRule="evenodd"
+            d="M14 6a4 4 0 0 1-4.899 3.899l-1.955 1.955a.5.5 0 0 1-.353.146H5v1.5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1-.5-.5v-2.293a.5.5 0 0 1 .146-.353l3.955-3.955A4 4 0 1 1 14 6Zm-4-2a.75.75 0 0 0 0 1.5.5.5 0 0 1 .5.5.75.75 0 0 0 1.5 0 2 2 0 0 0-2-2Z"
+            clipRule="evenodd"
           />
-        </label>
-        <label className="grow input input-bordered flex items-center gap-2">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 16 16"
-            fill="currentColor"
-            className="h-4 w-4 opacity-70"
-          >
-            <path
-              fillRule="evenodd"
-              d="M14 6a4 4 0 0 1-4.899 3.899l-1.955 1.955a.5.5 0 0 1-.353.146H5v1.5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1-.5-.5v-2.293a.5.5 0 0 1 .146-.353l3.955-3.955A4 4 0 1 1 14 6Zm-4-2a.75.75 0 0 0 0 1.5.5.5 0 0 1 .5.5.75.75 0 0 0 1.5 0 2 2 0 0 0-2-2Z"
-              clipRule="evenodd"
-            />
-          </svg>
-          <input
-            name="confirmPassword"
-            value={confirmPassword}
-            onChange={handleChange}
-            type="password"
-            className="grow"
-            placeholder="Confirm your password..."
+        </svg>
+        <input
+          name="password"
+          value={password}
+          onChange={handleChange}
+          type="password"
+          className="grow text-white placeholder-gray-400"
+          placeholder="Password"
+        />
+      </label>
+
+      <label className="input input-bordered flex items-center gap-2 m-4 bg-gray-700 border-gray-600">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 16 16"
+          fill="currentColor"
+          className="h-4 w-4 opacity-70"
+        >
+          <path
+            fillRule="evenodd"
+            d="M14 6a4 4 0 0 1-4.899 3.899l-1.955 1.955a.5.5 0 0 1-.353.146H5v1.5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1-.5-.5v-2.293a.5.5 0 0 1 .146-.353l3.955-3.955A4 4 0 1 1 14 6Zm-4-2a.75.75 0 0 0 0 1.5.5.5 0 0 1 .5.5.75.75 0 0 0 1.5 0 2 2 0 0 0-2-2Z"
+            clipRule="evenodd"
           />
-        </label>
-      </div>
-      <small>
+        </svg>
+        <input
+          name="confirmPassword"
+          value={confirmPassword}
+          onChange={handleChange}
+          type="password"
+          className="grow text-white placeholder-gray-400"
+          placeholder="Confirm your password..."
+        />
+      </label>
+
+      <small className="text-center text-gray-300">
         Already have an account?{" "}
-        <Link to="/login" className="text-primary hover:underline">
+        <Link to="/login" className="text-green-500 hover:underline">
           Log in!
         </Link>
       </small>
-      <button className="btn btn-primary self-center" disabled={loading}>
+
+      <button
+        className="px-6 py-3 my-5 bg-gray-600 text-white font-semibold rounded-full hover:bg-green-500 hover:text-gray-900 transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+        disabled={loading}
+      >
         Create Account
       </button>
     </form>
