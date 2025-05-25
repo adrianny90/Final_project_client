@@ -15,7 +15,7 @@ const MainLayout = () => {
         />
         <AuthContextProvider>
           <Header />
-          <main className="flex-grow container mx-auto px-4 py-8 text-white">
+          <main className="">
             <Outlet />
           </main>
         </AuthContextProvider>
