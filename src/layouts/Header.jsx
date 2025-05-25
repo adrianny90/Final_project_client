@@ -27,6 +27,15 @@ const Header = () => {
           >
             Give Away
           </Link>
+          <Link
+            to="/map"
+            className="px-4 py-2 bg-gray-600 text-white font-semibold rounded-lg hover:bg-green-500 hover:text-gray-900 transition-colors duration-300"
+          >
+            Map
+          </Link>
+          
+
+
         </div>
         <div className="flex flex-wrap justify-center items-center gap-3">
           {user ? (

@@ -20,7 +20,7 @@ const ItemMap = () => {
     const fetchItemsByCategory = async() => {
         try {
             setLoading(true);
-            const res = await axios.get(`http://localhost:3000/items/category?${selectedCatgegory}`);
+            const res = await axios.get(`http://localhost:3000/items/category?${selectedCategory}`);
             setItem(res.data);
 
         } catch (error) {
@@ -31,8 +31,8 @@ const ItemMap = () => {
     };
 
    return (
-<>
-<div className="mapPage-Container">
+
+<div className="mapPage-Container bg-amber-200">
     
     <fieldset className="fieldset-map">
         <input className="category-div" type="text" placeholder="what do you look for" />
@@ -44,14 +44,13 @@ const ItemMap = () => {
     </fieldset>
     
     <div className="map">
-            <Map items={items}center ={position}/>
+            <Map items={item} center= {position}/>
 
     </div>
 
 
 </div>
 
-</>
     )
 }
 

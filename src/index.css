@@ -25,6 +25,7 @@ body {
   
   /* Formular */
   .item-form {
+    color: #2f4f2f;
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
@@ -33,6 +34,7 @@ body {
   /* Gemeinsames Styling für alle Eingabe-Bereiche */
   .item-form input[type="text"],
   .item-form textarea {
+    color: black;
     width: 100%;
     padding: 0.75rem;
     border: 1px solid #d0d8cd;
@@ -42,6 +44,7 @@ body {
     transition: border 0.3s ease, box-shadow 0.3s ease;
   }
   .category-div {
+    color: #2f4f2f;
     width: 100%;
     padding: 0.75rem;
     border: 1px solid #d0d8cd;
@@ -94,7 +97,9 @@ body {
   
   /* Submit Button */
   .submit-button {
-    padding: 0.8rem 1.2rem;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 0.4rem 0.8rem;
     background-color: #6ba979;
     color: #fff;
     border: none;
@@ -152,7 +157,7 @@ body {
 .map-container {
   width:100%;
   
-  height: 50vh;
+  height: 60vh;
 
 }
 
