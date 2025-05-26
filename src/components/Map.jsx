@@ -61,7 +61,7 @@ const Map = ({ items = [], center, selectedItem, onItemSelect }) => {
       />
       {displayItems.map((item) => {
         const coords = item?.address?.location?.coordinates;
-        const position = Array.isArray(coords) && coords.lenght === 2
+        const position = Array.isArray(coords) && coords.length === 2
           ? [coords[1], coords[0]]
           : null;
         if (!position) return null;
@@ -71,7 +71,7 @@ const Map = ({ items = [], center, selectedItem, onItemSelect }) => {
 
         return (
           <Marker
-            key={item.id}
+            key={item._id || index}
             position={position}
             icon={isSelected ? HighlightIcon : DefaultIcon}
             eventHandlers={{
