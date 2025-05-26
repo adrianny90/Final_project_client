@@ -156,8 +156,8 @@ body {
   
 .map-container {
   width:100%;
-  
   height: 60vh;
+  
 
 }
 
@@ -167,7 +167,8 @@ body {
 .mapPage-Container {
   display: flex;
   flex-wrap:wrap;
-
+  /* background: linear-gradient(to bottom, #d2f8d2, #f5f5dc); */
+  
   flex-direction: row;
   gap:16px;
   height: 100vh;
@@ -175,6 +176,7 @@ body {
 .map-container {
   width: 100%; 
   height:100%;
+  
 }
 
 .fieldset-map {

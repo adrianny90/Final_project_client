@@ -51,10 +51,10 @@ const ItemMap = () => {
 
    return (
 
-<div className="mapPage-Container bg-green-200">
+<div className="mapPage-Container">
     
     <fieldset className="fieldset-map">
-        <input className="category-div" type="text" placeholder="what do you look for"
+        <input className="category-div mb-3" type="text" placeholder="what do you look for"
             value={searchQuery}
             onChange={(e)=> setSearchQuery(e.target.value)}
         />
