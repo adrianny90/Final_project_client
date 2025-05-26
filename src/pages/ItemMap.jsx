@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import CategorySelect from "../components/CategorySelect";
 import Spinner from "../components/Spinner";
 import axios from "axios";
+import { fetchItemsByCategory,fetchAllItems } from "../utils/fetching";
 
 const ItemMap = () => {
 
@@ -15,34 +16,36 @@ const ItemMap = () => {
 
 
     useEffect(()=> {
-        if(selectedCategory){
-            fetchItemsByCategory();
-        } else {
-            setItems([])
+        const fetchData = async () => {
+            setLoading(true);
+            try {
+                const data = selectedCategory
+                    ? await fetchItemsByCategory(selectedCategory)
+                    : await fetchAllItems();
+                    console.log("Fetched items:", data)
+                setItems(data);
+            } catch (error) {
+                console.error("Error fetching Items:", error)
+            } finally {
+                setLoading(false);
+            }
         }
+        fetchData();
     },[selectedCategory]);
 
-    const fetchItemsByCategory = async() => {
-        try {
-            setLoading(true);
-            const res = await axios.get(`http://localhost:3000/items/category?=${selectedCategory}`);
-            setItems(res.data);
-
-        } catch (error) {
-            console.error('Error fetching items:', error);
-        } finally {
-            setLoading(false)
-        }   
-    };
+  
     
     const handleItemSelect = (item) => {
         setSelectedItem(item);
-        if(item?.location?.coordinates){
-            setPosition([item.location.coordinates[1],item.location.coordinates[0]]);
+        if(item?.address?.location?.coordinates){
+            setPosition([
+                item.address.location.coordinates[1],
+                item.address.location.coordinates[0]
+            ]);
         }
     };
     const filteredItems = items.filter(item => 
-        item.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        item.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
         item.description?.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
