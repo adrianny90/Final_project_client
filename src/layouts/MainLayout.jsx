@@ -13,12 +13,12 @@ const MainLayout = () => {
           autoClose={1500}
           theme="colored"
         />
-        <AuthContextProvider>
+        <AuthContextProvider fetchUser={false}>
           <Header />
           <main className="flex-grow container mx-auto px-4 py-8 text-white">
             <Outlet />
           </main>
-        </AuthContextProvider>
+       </AuthContextProvider>
         <Footer />
       </div>
     </div>
