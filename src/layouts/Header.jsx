@@ -33,15 +33,26 @@ const Header = () => {
           >
             Map
           </Link>
-          
-
-
         </div>
         <div className="flex flex-wrap justify-center items-center gap-3">
           {user ? (
-            <span className="px-4 py-2 text-white font-medium">
-              Hi, {user.firstName}
-            </span>
+            <>
+              <span className="px-4 py-2 text-white font-medium">
+                Hi, {user.firstName}
+              </span>
+              <Link
+                className="flex items-center justify-center w-10 h-10 bg-gray-600 text-white rounded-full hover:bg-green-500 hover:text-gray-900 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-green-400"
+                to="/panel"
+              >
+                <svg
+                  className="w-6 h-6"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+                </svg>
+              </Link>
+            </>
           ) : (
             <Link
               to="/login"

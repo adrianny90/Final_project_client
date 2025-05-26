@@ -1,21 +1,27 @@
 import { createContext, useEffect, useState } from "react";
 import { me, signOut } from "../utils/auth.js";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router";
 
 const AuthContext = createContext();
 
-const AuthContextProvider = ({ children }) => {
+const AuthContextProvider = ({ children, fetchUser = true }) => {
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(fetchUser);
   console.log("User: ", user);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const getUser = async () => {
+      if (!fetchUser) return;
       try {
         const userData = await me();
         if (userData?.email) setUser(userData);
         // setUser(null);
       } catch (error) {
-        console.log(error);
+        console.log("Auth error", error?.response?.status || error.message);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -27,6 +33,7 @@ const AuthContextProvider = ({ children }) => {
       await signOut(); //Cookie will be deleted
       setUser(null); //User data will be deleted
       toast.success("Logout succeeded");
+      setTimeout(() => navigate("/login"), 3000);
     } catch (error) {
       console.log(error);
     }
@@ -36,6 +43,7 @@ const AuthContextProvider = ({ children }) => {
     user,
     setUser,
     logOut,
+    loading,
   };
 
   return <AuthContext.Provider value={values}>{children}</AuthContext.Provider>;
