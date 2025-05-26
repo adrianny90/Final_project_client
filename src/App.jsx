@@ -11,6 +11,7 @@ import GetItems from "./pages/GetItems.jsx";
 import ItemMap from "./pages/ItemMap.jsx";
 import ItemDetails from "./pages/ItemDetails.jsx";
 import { AuthContextProvider } from "./context/AuthContextProvider.jsx";
+import Panel from "./pages/Panel.jsx";
 
 function App() {
   return (
@@ -22,13 +23,15 @@ function App() {
           <Route path="/signup" element={<Register />} />
           <Route path="/verify/:token" element={<Verify />} />
 
-          <Route element={
-            <AuthContextProvider>
-              <ProtectedLayout />
-            </AuthContextProvider>
-          }
+          <Route
+            element={
+              <AuthContextProvider>
+                <ProtectedLayout />
+              </AuthContextProvider>
+            }
           >
             <Route path="/give" element={<AddPost />} />
+            <Route path="/panel" element={<Panel />} />
           </Route>
           <Route path="/get" element={<GetItems />} />
           <Route path="/map" element={<ItemMap />} />

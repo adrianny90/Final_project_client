@@ -15,7 +15,7 @@ const Verify = () => {
       console.log(data);
 
       toast.success(data.message || "Account verified successfully!");
-      setTimeout(() => navigate("/login"), 3000); // Przekieruj po 3 sekundach
+      setTimeout(() => navigate("/login"), 3000);
     } catch (error) {
       toast.error(error.message || "Error verifying account");
     } finally {
