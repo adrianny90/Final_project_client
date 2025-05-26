@@ -7,9 +7,9 @@ import Login from "./pages/Login.jsx";
 import NotFound from "./pages/NotFound.jsx";
 import ProtectedLayout from "./layouts/ProtectedLayout.jsx";
 import Verify from "./pages/Verify.jsx";
-import GetItems from "./pages/GetItems.jsx";
+import GetFreePage from "./pages/GetFreePage.jsx";
 import ItemMap from "./pages/ItemMap.jsx";
-import ItemDetails from "./pages/ItemDetails.jsx";
+import ItemDetails from "./pages/ItemDetailsPage.jsx";
 
 function App() {
   return (
@@ -23,7 +23,7 @@ function App() {
           <Route element={<ProtectedLayout />}>
             <Route path="/give" element={<AddPost />} />
           </Route>
-          <Route path="/get" element={<GetItems />} />
+          <Route path="/get" element={<GetFreePage />} />
           <Route path="/map" element={<ItemMap />} />
           <Route path="/items/:id" element={<ItemDetails />} />
           <Route path="*" element={<NotFound />} />
