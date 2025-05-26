@@ -28,9 +28,9 @@ const Map = ({ items = [], center, selectedItem, onItemSelect }) => {
   const [map, setMap] = useState(null);
 
   useEffect(() => {
-    if (map && (center || selectedItem?.location?.coordinates)) {
-      const newCenter = selectedItem?.location?.coordinates
-        ? [selectedItem.location.coordinates[1], selectedItem.location.coordinates[0]]
+    if (map && (center || selectedItem?.address?.location?.coordinates)) {
+      const newCenter = selectedItem?.address?.location?.coordinates
+        ? [selectedItem.address.location.coordinates[1], selectedItem.address.location.coordinates[0]]
         : center;
       map.flyTo(newCenter, 15);
     }
@@ -60,9 +60,11 @@ const Map = ({ items = [], center, selectedItem, onItemSelect }) => {
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
       {displayItems.map((item) => {
-        const position = item.location?.coordinates
-          ? [item.location.coordinates[1], item.location.coordinates[0]]
-          : [item.lat, item.lng];
+        const coords = item?.address?.location?.coordinates;
+        const position = Array.isArray(coords) && coords.lenght === 2
+          ? [coords[1], coords[0]]
+          : null;
+        if (!position) return null;
         
         const isSelected = selectedItem && selectedItem.id === item.id;
         const isDefaultMarker = item.id === 'default-marker';
