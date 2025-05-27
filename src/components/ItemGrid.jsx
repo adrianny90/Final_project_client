@@ -15,6 +15,8 @@ const ItemGrid = ({ selectedCategories }) => {
           : "";
         const response = await axios.get(`http://localhost:3000/items${query}`);
         setItems(response.data);
+        console.log("all items", response.data);
+
         //setLoading(false);
       } catch (error) {
         setError(`Failed to fetch items: ${error.message}`);
