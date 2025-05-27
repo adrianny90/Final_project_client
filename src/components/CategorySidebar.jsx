@@ -1,22 +1,22 @@
-import CategorySelect from "./CategorySelect";
-
 const CategorySidebar = ({ selectedCategories, onCategoryChange }) => {
   const categories = [
     "Accessories",
-    "Baby & Toys",
+    "Baby and Toys",
     "Bathroom Essentials",
-    "Bedding & Linens",
+    "Bedding and Linens",
     "Books",
     "Clothing",
     "Decorations",
     "Electronics",
+    "Fitness and Sports",
     "Furniture",
-    "Kitchen & Dining",
+    "Kitchen and Dining",
     "Gardening Supplies",
-    "Hobby & Sports",
+    "Hobby",
     "Pets",
     "Services",
     "Miscellaneous",
+    "Requested Items",
   ];
 
   const toggleCategory = (category) => {
