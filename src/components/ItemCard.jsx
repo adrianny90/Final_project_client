@@ -12,10 +12,14 @@ const formatDate = (dateString) => {
 
 const ItemCard = ({ item }) => {
   return (
-    <div className="bg-white rounded-xl overflow-hidden text-black">
-      <img src={item.photos} alt={item.title} className="h-60 w-full" />
+    <div className="bg-gray-200 rounded-xl overflow-hidden text-black">
+      <img
+        src={Array.isArray(item.photos) ? item.photos[0] : item.photos}
+        alt={item.title}
+        className="h-60 w-full"
+      />
       <div className="p-2">
-        <Link to={`http://localhost:5173/get/${item.id}`}>
+        <Link to={`items/${item._id}`}>
           <h2 className="font-bold">
             {item.title.length > 30
               ? item.title.slice(0, 30) + "..."

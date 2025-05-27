@@ -7,9 +7,9 @@ import Login from "./pages/Login.jsx";
 import NotFound from "./pages/NotFound.jsx";
 import ProtectedLayout from "./layouts/ProtectedLayout.jsx";
 import Verify from "./pages/Verify.jsx";
-import GetItems from "./pages/GetItems.jsx";
+import GetFreePage from "./pages/GetFreePage.jsx";
 import ItemMap from "./pages/ItemMap.jsx";
-import ItemDetails from "./pages/ItemDetails.jsx";
+import ItemDetails from "./pages/ItemDetailsPage.jsx";
 import { AuthContextProvider } from "./context/AuthContextProvider.jsx";
 import Panel from "./pages/Panel.jsx";
 
@@ -33,7 +33,7 @@ function App() {
             <Route path="/give" element={<AddPost />} />
             <Route path="/panel" element={<Panel />} />
           </Route>
-          <Route path="/get" element={<GetItems />} />
+          <Route path="/get" element={<GetFreePage />} />
           <Route path="/map" element={<ItemMap />} />
           <Route path="/items/:id" element={<ItemDetails />} />
           <Route path="*" element={<NotFound />} />

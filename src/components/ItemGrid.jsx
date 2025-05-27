@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import ItemCard from "./ItemCard";
 
-const ItemGrid = () => {
+const ItemGrid = ({ selectedCategories }) => {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -10,17 +10,27 @@ const ItemGrid = () => {
   useEffect(() => {
     const fetchItems = async () => {
       try {
-        const response = await axios.get("http://localhost:3000/items");
+        const query = selectedCategories.length
+          ? `?category=${selectedCategories.join(",")}`
+          : "";
+        const response = await axios.get(`http://localhost:3000/items${query}`);
         setItems(response.data);
-        setLoading(false);
+        //setLoading(false);
       } catch (error) {
         setError(`Failed to fetch items: ${error.message}`);
+        //setLoading(false);
+      } finally {
         setLoading(false);
       }
     };
 
     fetchItems();
-  }, []);
+  }, [selectedCategories]);
+
+  const filteredItems =
+    selectedCategories.length > 0
+      ? items.filter((item) => selectedCategories.includes(item.category))
+      : items;
 
   if (loading) {
     return <div className="loading-message">Loading items...</div>;
@@ -31,9 +41,9 @@ const ItemGrid = () => {
   }
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 p-4">
-      {items.map((item) => (
-        <ItemCard key={item.id} item={item} />
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
+      {filteredItems.map((item, idx) => (
+        <ItemCard key={idx} item={item} />
       ))}
     </div>
   );
