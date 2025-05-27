@@ -156,37 +156,42 @@ body {
   
 .map-container {
   width:100%;
-  
   height: 60vh;
+  
 
-}
-
-.mapPage-Container {
-  display: flex;
-  flex-direction: row;
-  gap:16px;
-  height: 100vh;
-}
-
-.fieldset-map {
-  flex: 0 0 200px;
-  padding: 16px;
-  border-radius: 8px;
-  border: 1px solid #ddd;
-}
-
-.map {
-  width: 100%;
-  height: 100%;
 }
 
 .highlight-marker {
   filter: hue-rotate(120deg) drop-shadow(0 0 4px rgba(0, 0, 0, 0.3));
 }
-
-.map-container {
-  min-height: 400px; /* Fallback für kleine Screens */
+.mapPage-Container {
+  display: flex;
+  flex-wrap:wrap;
+  /* background: linear-gradient(to bottom, #d2f8d2, #f5f5dc); */
+  
+  flex-direction: row;
+  gap:16px;
+  height: 100vh;
 }
+.map-container {
+  width: 100%; 
+  height:100%;
+  
+}
+
+.fieldset-map {
+  flex: 0 0 200px;
+  padding: 16px;
+
+}
+
+
+.map {
+  min-width: 320px;
+  height: 400px;
+  flex: 1;
+}
+
 
 .leaflet-popup-content {
   min-width: 200px;

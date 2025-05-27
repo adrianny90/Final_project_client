@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import PhotoUpload from "../components/PhotoUpload";
 import CategorySelect from "../components/CategorySelect";
 import Map from "../components/Map.jsx";
@@ -7,9 +7,13 @@ import cloudinaryUpload from "../utils/cloudinarayUpload.js";
 import axios from "axios";
 
 import Spinner from "../components/Spinner.jsx";
+import { AuthContext } from "../context/AuthContextProvider.jsx";
 // import { useContext, createContext } from "react";
 
 const AddPost = () => {
+
+  const {user} = useContext(AuthContext);
+
   //storage for formdata
   const [formData, setFormData] = useState({
     photos: [],
@@ -28,31 +32,14 @@ const AddPost = () => {
       },
     },
   });
-  const user = { id: "12345" };
+  
   const [previewUrls, setPreviewUrls] = useState([]); //storage for photo preview
   const [error, setError] = useState(null);
   const [isSubmitting, setIsSubitting] = useState(false);
-
   const [successMsg, setSuccessMsg] = useState("");
 
-  useEffect(() => {
-    navigator.geolocation.getCurrentPosition((position) => {
-      const { latitude, longitude } = position.coords;
-      setFormData((prev) => ({
-        ...prev,
-        address: {
-          ...prev.address,
-          location: {
-            type: "Point",
-            coordinates: [longitude, latitude],
-          },
-        },
-      }));
-    });
-  }, []);
-
-  //storing input data while typing
-  const handleChange = (e) => {
+   //storing input data while typing
+   const handleChange = (e) => {
     const { name, value, files } = e.target;
 
     if (name === "photos") {
@@ -90,31 +77,62 @@ const AddPost = () => {
     }
   };
 
+      //transforming address to coordinates and transforming into geojson
+  const getCoordinatesFromAddress = async () => {
+    const {street,houseStreet,postalCode,city} = formData.address;
+    const fullAddress = `${street} ${houseStreet}, ${postalCode} ${city}`;
+
+    const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
+      fullAddress
+    )}`;
+    try {
+      const response = await fetch(url);
+      const data = await response.json();
+
+      if (data.length ===0){
+        throw new Error("No coordinates found for the given address");
+      }
+      const {lat,lon} = data[0];
+      return [parseFloat(lon), parseFloat(lat)];
+
+    } catch (error) {
+      console.error("Error fetching coordinates")
+      throw new Error("Failed to fetch coordinates for adress");
+    }
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setError(null);
 
     try {
       setIsSubitting(true);
+
+      const coordinates = await getCoordinatesFromAddress();
 
       const uploadedPhotoUrls = await cloudinaryUpload(formData.photos);
 
       const dataToSend = {
         title: formData.title,
-        userId: user?.id || "12345",
+        userId: user?._id,
         category: formData.category,
         description: formData.description,
         collectionTime: formData.collectionTime,
-        // location: formData.location,
-        address: formData.address,
+        
+        address:{
+          ...formData.address,
+          location:{
+            type:"Point",
+            coordinates: coordinates,
+          },
+        },
         photos: uploadedPhotoUrls,
       };
 
       console.log("data to send:", dataToSend);
 
-      const response = await axios.post(
-        "http://localhost:3000/items",
-        dataToSend
-      );
+      const response = await axios.post(  "http://localhost:3000/items",dataToSend);
+
       // reset form after sendeing data
       setFormData({
         photos: [],
@@ -133,16 +151,15 @@ const AddPost = () => {
           },
         },
       });
-      setPreviewUrls([]);
 
+      setPreviewUrls([]);
       setSuccessMsg("Item submitted succesfully");
     } catch (error) {
       console.log("Error while submitting", error);
-      setError("Something went wrong while submitting");
+      setError(error.message || "Something went wrong while submitting");
     } finally {
       setIsSubitting(false);
     }
-    // checking the key-values pairs
   };
 
   return (
