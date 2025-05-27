@@ -17,9 +17,9 @@ const AuthContextProvider = ({ children, fetchUser = true }) => {
       try {
         const userData = await me();
         if (userData?.email) setUser(userData);
-        // setUser(null);
       } catch (error) {
         console.log("Auth error", error?.response?.status || error.message);
+        setUser(null);
       } finally {
         setLoading(false);
       }
@@ -33,7 +33,7 @@ const AuthContextProvider = ({ children, fetchUser = true }) => {
       await signOut(); //Cookie will be deleted
       setUser(null); //User data will be deleted
       toast.success("Logout succeeded");
-      setTimeout(() => navigate("/login"), 3000);
+      setTimeout(() => navigate("/"), 3000);
     } catch (error) {
       console.log(error);
     }
