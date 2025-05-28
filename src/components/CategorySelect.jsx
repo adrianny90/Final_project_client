@@ -24,7 +24,7 @@ const CategorySelect = ({ value, onChange }) => (
       <option value="Hobby">Hobby</option>
       <option value="Pets">Pets</option>
       <option value="Services">Services</option>
-      <option value="Miscellaneous">Miscellaneous</option>
+      <option value="Others">Others</option>
     </select>
   </div>
 );
