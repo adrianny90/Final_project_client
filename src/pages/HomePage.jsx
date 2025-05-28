@@ -38,7 +38,10 @@ const HomePage = () => {
           </p>
         </div>
         <div className="py-6 flex items-center">
-          <Link to="/give" className="btn border border-gray-300 rounded-full ">
+          <Link
+            to="/give"
+            className="btn border border-gray-300 rounded-full hover:bg-green-500 hover:text-gray-900 transition-colors duration-300 "
+          >
             Get Started
           </Link>
         </div>
