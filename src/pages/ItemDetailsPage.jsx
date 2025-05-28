@@ -60,7 +60,7 @@ const ItemDetails = () => {
         className="w-full h-72 object-cover rounded-md"
       />
 
-      <h1 className="text-2xl font-bold mt-4">{item.title}</h1>
+      <h1 className="text-black text-2xl font-bold mt-4">{item.title}</h1>
 
       <div className="flex items-center text-gray-700 gap-2 mt-2">
         <MapPin className="w-5 h-5 text-gray-700" />
@@ -91,7 +91,7 @@ const ItemDetails = () => {
             // Navigate to a chat page or open a modal
             alert("Send message functionality to be implemented");
           }}
-          className="bg-gray-600 text-white font-semibold rounded-lg hover:bg-green-500 hover:text-gray-900 transition-colors duration-300"
+          className="mt-4 w-40 bg-gray-600 font-bold text-white p-2 rounded-full hover:bg-green-500 hover:text-gray-900 transition-colors duration-300"
         >
           Send Message
         </button>

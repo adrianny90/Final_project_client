@@ -35,7 +35,7 @@ function App() {
           </Route>
           <Route path="/get" element={<GetFreePage />} />
           <Route path="/map" element={<ItemMap />} />
-          <Route path="/items/:id" element={<ItemDetails />} />
+          <Route path="get/items/:id" element={<ItemDetails />} />
           <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>
