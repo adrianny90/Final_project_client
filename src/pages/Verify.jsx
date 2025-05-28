@@ -22,16 +22,22 @@ const Verify = () => {
     }
   };
   return (
-    <div className="max-w-md">
-      <h1 className="text-xl font-bold py-4">Please verify your account</h1>
+    <div className=" flex flex-col items-center">
+      <h1 className="text-2xl text-black font-bold py-4 m-3">
+        Please verify your account
+      </h1>
       <button
         onClick={handleVerify}
-        className="btn border border-gray-300 rounded-full"
+        className="btn border border-gray-300 rounded-full m-1 hover:bg-green-500 hover:text-gray-900 transition-colors duration-300 "
       >
         Click to confirm your account
       </button>
+      <p className="text-black text-xl m-3">or</p>
       <div className="py-6">
-        <Link to="/" className="btn border border-gray-300 rounded-full">
+        <Link
+          to="/"
+          className="btn border border-gray-300 rounded-full m-1 hover:bg-green-500 hover:text-gray-900 transition-colors duration-300"
+        >
           Refuse
         </Link>
       </div>

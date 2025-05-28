@@ -30,30 +30,30 @@ const Panel = () => {
       <div className="w-64 bg-gray-800 p-4 flex flex-col gap-2">
         <button
           onClick={handlePersonalData}
-          className={`w-full py-3 px-4 rounded-lg text-left text-white font-medium transition-all duration-200 ${
+          className={`px-4 py-2  text-white font-semibold rounded-lg  hover:text-gray-900 transition-colors duration-300 ${
             showData
-              ? "bg-blue-700 hover:bg-blue-600"
-              : "bg-blue-900 hover:bg-blue-800"
+              ? "bg-gray-400 hover:bg-green-500"
+              : "bg-gray-600 hover:bg-green-800"
           }`}
         >
           Personal Data
         </button>
         <button
           onClick={handleMessages}
-          className={`w-full py-3 px-4 rounded-lg text-left text-white font-medium transition-all duration-200 ${
+          className={`px-4 py-2  text-white font-semibold rounded-lg  hover:text-gray-900 transition-colors duration-300 ${
             showMessage
-              ? "bg-blue-700 hover:bg-blue-600"
-              : "bg-blue-900 hover:bg-blue-800"
+              ? "bg-gray-400 hover:bg-green-500"
+              : "bg-gray-600 hover:bg-green-800"
           }`}
         >
           Messages
         </button>
         <button
           onClick={handleItems}
-          className={`w-full py-3 px-4 rounded-lg text-left text-white font-medium transition-all duration-200 ${
+          className={`px-4 py-2  text-white font-semibold rounded-lg  hover:text-gray-900 transition-colors duration-300 ${
             showItems
-              ? "bg-blue-700 hover:bg-blue-600"
-              : "bg-blue-900 hover:bg-blue-800"
+              ? "bg-gray-400 hover:bg-green-500"
+              : "bg-gray-600 hover:bg-green-800"
           }`}
         >
           My Items
