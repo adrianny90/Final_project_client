@@ -4,6 +4,7 @@ import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import markerIcon from 'leaflet/dist/images/marker-icon.png';
 import markerShadow from 'leaflet/dist/images/marker-shadow.png';
+import ItemCard from "./ItemCard";
 
 const DefaultIcon = L.icon({
   iconUrl: markerIcon,
@@ -80,14 +81,15 @@ const Map = ({ items = [], center, selectedItem, onItemSelect }) => {
           >
             <Popup>
               <div>
-                <h3>{item.title || item.name}</h3>
+                <ItemCard item={item}/>
+                {/* <h3>{item.title || item.name}</h3>
                 {!isDefaultMarker && (
                   <>
                     <p>{item.description}</p>
                     {item.category && <p>Category: {item.category}</p>}
                     {isSelected && <p>✓ Selected</p>}
                   </>
-                )}
+                )} */}
               </div>
             </Popup>
           </Marker>
