@@ -15,7 +15,7 @@ const CategorySidebar = ({ selectedCategories, onCategoryChange }) => {
     "Hobby",
     "Pets",
     "Services",
-    "Miscellaneous",
+    "Others",
     "Requested Items",
   ];
 

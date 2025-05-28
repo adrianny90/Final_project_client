@@ -14,7 +14,7 @@ const ItemCard = ({ item }) => {
   return (
     <div className="bg-gray-200 rounded-xl overflow-hidden text-black">
       <img
-        src={Array.isArray(item.photos) ? item.photos[0] : item.photos}
+        src={Array.isArray(item.photos) ? item.photos[0] : "/image/item.jpg"}
         alt={item.title}
         className="h-60 w-full"
       />
