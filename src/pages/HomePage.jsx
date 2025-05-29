@@ -14,7 +14,7 @@ const HomePage = () => {
           onError={() => {
             console.error("Video failed to load:");
           }}
-          onLoadedData={() => console.log("Video loaded successfully")}
+          //onLoadedData={() => console.log("Video loaded successfully")}
         >
           <source src="/video/video.mp4" type="video/mp4" />
           Your browser does not support the video tag.
