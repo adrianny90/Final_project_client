@@ -8,7 +8,6 @@ const AuthContext = createContext();
 const AuthContextProvider = ({ children, fetchUser = true }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(fetchUser);
-  console.log("User: ", user);
   const navigate = useNavigate();
 
   useEffect(() => {

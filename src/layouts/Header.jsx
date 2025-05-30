@@ -6,7 +6,7 @@ const Header = () => {
 
   return (
     <header className="bg-gray-800 text-white shadow-lg">
-      <nav className="container mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
+      <nav className="container mx-auto p-3 flex flex-col sm:flex-row justify-between items-center gap-1">
         <Link to="/" className="text-2xl font-bold">
           <img
             src="/image/img.jpg"
@@ -17,21 +17,15 @@ const Header = () => {
         <div className="flex flex-wrap justify-center items-center gap-3">
           <Link
             to="/get"
-            className="px-4 py-2 bg-gray-600 text-white font-semibold rounded-lg hover:bg-green-500 hover:text-gray-900 transition-colors duration-300"
+            className="px-4 py-2 bg-gray-600 text-white font-semibold rounded-lg hover:bg-green-500 hover:text-gray-900 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-green-400"
           >
             Get Free
           </Link>
           <Link
             to="/give"
-            className="px-4 py-2 bg-gray-600 text-white font-semibold rounded-lg hover:bg-green-500 hover:text-gray-900 transition-colors duration-300"
+            className="px-4 py-2 bg-gray-600 text-white font-semibold rounded-lg hover:bg-green-500 hover:text-gray-900 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-green-400"
           >
             Give Away
-          </Link>
-          <Link
-            to="/map"
-            className="px-4 py-2 bg-gray-600 text-white font-semibold rounded-lg hover:bg-green-500 hover:text-gray-900 transition-colors duration-300"
-          >
-            Map
           </Link>
         </div>
         <div className="flex flex-wrap justify-center items-center gap-3">
@@ -56,7 +50,7 @@ const Header = () => {
           ) : (
             <Link
               to="/login"
-              className="px-4 py-2 bg-gray-600 text-white font-semibold rounded-full hover:bg-green-500 hover:text-gray-900 transition-colors duration-300"
+              className="px-4 py-2 bg-gray-600 text-white font-semibold rounded-full hover:bg-green-500 hover:text-gray-900 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-green-400"
             >
               Login
             </Link>
@@ -64,14 +58,14 @@ const Header = () => {
           {user ? (
             <button
               onClick={logOut}
-              className="px-4 py-2 bg-gray-600 text-white font-semibold rounded-full hover:bg-green-500 hover:text-gray-900 transition-colors duration-300"
+              className="px-4 py-2 bg-gray-600 text-white font-semibold rounded-full hover:bg-green-500 hover:text-gray-900 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-green-400"
             >
               Logout
             </button>
           ) : (
             <Link
               to="/signup"
-              className="px-4 py-2 bg-gray-600 text-white font-semibold rounded-full hover:bg-green-500 hover:text-gray-900 transition-colors duration-300"
+              className="px-4 py-2 bg-gray-600 text-white font-semibold rounded-full hover:bg-green-500 hover:text-gray-900 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-green-400"
             >
               Sign up
             </Link>
