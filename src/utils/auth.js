@@ -45,12 +45,17 @@ export const me = async () => {
 };
 
 export const verifyUser = async (token) => {
-  const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/auth/verify`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(token),
-  });
-  if (!res.ok) throw new Error("Error while signing up");
+  const res = await fetch(
+    `${import.meta.env.VITE_API_BASE_URL}/verify/${token}`,
+    {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    }
+  );
+  if (!res.ok) {
+    const errorData = await res.json();
+    throw new Error(errorData.error || "Error while verifying user");
+  }
   const data = await res.json();
   return data;
 };
