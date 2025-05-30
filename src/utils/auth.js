@@ -1,5 +1,5 @@
 export const signUp = async (formData) => {
-  const res = await fetch(`http://localhost:3000/auth/signup`, {
+  const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/auth/signup`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(formData),
@@ -10,7 +10,7 @@ export const signUp = async (formData) => {
 };
 
 export const signIn = async (formData) => {
-  const res = await fetch(`http://localhost:3000/auth/signin`, {
+  const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/auth/signin`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(formData),
@@ -22,7 +22,7 @@ export const signIn = async (formData) => {
 };
 
 export const signOut = async () => {
-  const res = await fetch(`http://localhost:3000/auth/signout`, {
+  const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/auth/signout`, {
     method: "DELETE",
     credentials: "include",
   });
@@ -32,7 +32,7 @@ export const signOut = async () => {
 };
 
 export const me = async () => {
-  const res = await fetch(`http://localhost:3000/auth/me`, {
+  const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/auth/me`, {
     credentials: "include",
   });
 
@@ -43,7 +43,7 @@ export const me = async () => {
 };
 
 export const verifyUser = async (token) => {
-  const res = await fetch(`http://localhost:3000/auth/verify`, {
+  const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/auth/verify`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(token),
@@ -54,7 +54,7 @@ export const verifyUser = async (token) => {
 };
 
 export const updateUser = async (formData) => {
-  const res = await fetch(`http://localhost:3000/auth/update`, {
+  const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/auth/update`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(formData),

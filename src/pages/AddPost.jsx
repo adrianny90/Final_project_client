@@ -11,8 +11,7 @@ import { AuthContext } from "../context/AuthContextProvider.jsx";
 // import { useContext, createContext } from "react";
 
 const AddPost = () => {
-
-  const {user} = useContext(AuthContext);
+  const { user } = useContext(AuthContext);
 
   //storage for formdata
   const [formData, setFormData] = useState({
@@ -32,14 +31,14 @@ const AddPost = () => {
       },
     },
   });
-  
+
   const [previewUrls, setPreviewUrls] = useState([]); //storage for photo preview
   const [error, setError] = useState(null);
   const [isSubmitting, setIsSubitting] = useState(false);
   const [successMsg, setSuccessMsg] = useState("");
 
-   //storing input data while typing
-   const handleChange = (e) => {
+  //storing input data while typing
+  const handleChange = (e) => {
     const { name, value, files } = e.target;
 
     if (name === "photos") {
@@ -77,9 +76,9 @@ const AddPost = () => {
     }
   };
 
-      //transforming address to coordinates and transforming into geojson
+  //transforming address to coordinates and transforming into geojson
   const getCoordinatesFromAddress = async () => {
-    const {street,houseStreet,postalCode,city} = formData.address;
+    const { street, houseStreet, postalCode, city } = formData.address;
     const fullAddress = `${street} ${houseStreet}, ${postalCode} ${city}`;
 
     const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
@@ -89,14 +88,13 @@ const AddPost = () => {
       const response = await fetch(url);
       const data = await response.json();
 
-      if (data.length ===0){
+      if (data.length === 0) {
         throw new Error("No coordinates found for the given address");
       }
-      const {lat,lon} = data[0];
+      const { lat, lon } = data[0];
       return [parseFloat(lon), parseFloat(lat)];
-
     } catch (error) {
-      console.error("Error fetching coordinates")
+      console.error("Error fetching coordinates");
       throw new Error("Failed to fetch coordinates for adress");
     }
   };
@@ -118,11 +116,11 @@ const AddPost = () => {
         category: formData.category,
         description: formData.description,
         collectionTime: formData.collectionTime,
-        
-        address:{
+
+        address: {
           ...formData.address,
-          location:{
-            type:"Point",
+          location: {
+            type: "Point",
             coordinates: coordinates,
           },
         },
@@ -131,7 +129,10 @@ const AddPost = () => {
 
       console.log("data to send:", dataToSend);
 
-      const response = await axios.post(  "http://localhost:3000/items",dataToSend);
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_BASE_URL}/items`,
+        dataToSend
+      );
 
       // reset form after sendeing data
       setFormData({
@@ -270,11 +271,9 @@ const AddPost = () => {
       {isSubmitting && <Spinner />}
       {successMsg && <p className="succes-message">{successMsg}</p>}
       <div className="map-div">
-
-                <Map />
+        <Map />
       </div>
     </div>
-    
   );
 };
 

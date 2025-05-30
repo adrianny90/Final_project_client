@@ -69,12 +69,15 @@ const Panel = () => {
       const fetchMessagesAndItems = async () => {
         setLoading(true);
         try {
-          const res = await fetch("http://localhost:3000/message/user", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(user),
-            credentials: "include",
-          });
+          const res = await fetch(
+            `${import.meta.env.VITE_API_BASE_URL}/message/user`,
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(user),
+              credentials: "include",
+            }
+          );
           if (!res.ok) {
             throw new Error("Failed to fetch messages");
           }
@@ -84,12 +87,15 @@ const Panel = () => {
           console.log("messages Users", itemIds);
 
           setMessages(messagesData);
-          const itemsRes = await fetch("http://localhost:3000/items/user", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            credentials: "include",
-            body: JSON.stringify(itemIds),
-          });
+          const itemsRes = await fetch(
+            `${import.meta.env.VITE_API_BASE_URL}/items/user`,
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              credentials: "include",
+              body: JSON.stringify(itemIds),
+            }
+          );
           if (!itemsRes.ok) {
             throw new Error("Failed to fetch items");
           }
@@ -114,12 +120,15 @@ const Panel = () => {
         console.log(user);
 
         try {
-          const res = await fetch("http://localhost:3000/items/userAll", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(user),
-            credentials: "include",
-          });
+          const res = await fetch(
+            `${import.meta.env.VITE_API_BASE_URL}/items/userAll`,
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(user),
+              credentials: "include",
+            }
+          );
           if (!res.ok) {
             throw new Error("Failed to fetch items");
           }
