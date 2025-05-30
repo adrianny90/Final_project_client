@@ -13,7 +13,9 @@ const ItemGrid = ({ selectedCategories }) => {
         const query = selectedCategories.length
           ? `?category=${selectedCategories.join(",")}`
           : "";
-        const response = await axios.get(`http://localhost:3000/items${query}`);
+        const response = await axios.get(
+          `${import.meta.env.VITE_API_BASE_URL}/items${query}`
+        );
         setItems(response.data);
         // console.log("all items", response.data);
 

@@ -40,7 +40,9 @@ const ItemDetails = () => {
   useEffect(() => {
     const fetchItem = async () => {
       try {
-        const response = await axios.get(`http://localhost:3000/items/${id}`);
+        const response = await axios.get(
+          `${import.meta.env.VITE_API_BASE_URL}/items/${id}`
+        );
         setItem(response.data);
       } catch (error) {
         console.error("Error fetching item:", error);
@@ -65,7 +67,7 @@ const ItemDetails = () => {
       };
 
       const response = await axios.post(
-        "http://localhost:3000/messages",
+        `${import.meta.env.VITE_API_BASE_URL}/messages`,
         dataToSend
       );
 
