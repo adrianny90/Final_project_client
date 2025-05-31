@@ -30,12 +30,15 @@ const formatDateTime = (dateString) => {
 const ItemDetails = () => {
   const [item, setItem] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [currentImage, setCurrentImage] = useState(0);
   const [message, setMessage] = useState("");
   const [sending, setSending] = useState(false);
 
   const { id } = useParams();
   const { user } = useAuth();
+  console.log("User:", user);
   const senderId = user?.userId;
+  console.log("Sender Id:", senderId);
 
   useEffect(() => {
     const fetchItem = async () => {
@@ -60,14 +63,15 @@ const ItemDetails = () => {
     try {
       setSending(true);
       const dataToSend = {
-        senderId: senderId,
-        receiverId: item.userId,
         content: message,
+        receiverId: item.userId,
+        senderId: senderId,
         itemId: item._id,
       };
+      console.log("Sending message:", dataToSend);
 
       const response = await axios.post(
-        `${import.meta.env.VITE_API_BASE_URL}/messages`,
+        `${import.meta.env.VITE_API_BASE_URL}/message`,
         dataToSend
       );
 
@@ -81,24 +85,50 @@ const ItemDetails = () => {
     }
   };
 
+  const handlePrev = () => {
+    setCurrentImage((prev) => (prev === 0 ? item.photos.length - 1 : prev - 1));
+  };
+
+  const handleNext = () => {
+    setCurrentImage((prev) => (prev === item.photos.length - 1 ? 0 : prev + 1));
+  };
+
   if (loading) return <p>Loading...</p>;
   if (!item) return <p>Item not found.</p>;
 
   return (
-    <div className="max-w-lg mx-auto p-2 bg-gray-200 rounded-xl overflow-hidden">
-      <img
-        src={
-          Array.isArray(item.photos)
-            ? item.photos[0]
-            : item.photos || "/image/item.jpg"
-        }
-        alt={item.title}
-        className="w-full"
-      />
+    <div className="max-w-3xl mx-auto p-2 bg-gray-200 rounded-xl overflow-hidden">
+      <div className="relative w-full h-72">
+        <img
+          src={item.photos[currentImage] || "/image/item.jpg"}
+          className="w-full h-72 object-cover rounded-md"
+        />
+        {item.photos.length > 1 && (
+          <>
+            <button
+              onClick={handlePrev}
+              className="absolute top-1/2 left-4 transform -translate-y-1/2 bg-gray-700 text-white p-2 rounded-full hover:bg-black/80"
+              aria-label="Previous image"
+            >
+              ❮
+            </button>
+            <button
+              onClick={handleNext}
+              className="absolute top-1/2 right-4 transform -translate-y-1/2 bg-gray-700 text-white p-2 rounded-full hover:bg-black/80"
+              aria-label="Next image"
+            >
+              ❯
+            </button>
+            <div className="absolute bottom-2 right-2 bg-black/60 text-white text-xs rounded px-2 py-0.5">
+              {currentImage + 1}/{item.photos.length}
+            </div>
+          </>
+        )}
+      </div>
 
-      <h1 className="text-black text-2xl font-bold mt-4 px-4">{item.title}</h1>
+      <h1 className="text-black text-xl font-bold mt-4 px-4">{item.title}</h1>
 
-      <div className="flex items-center text-gray-700 gap-2 mt-2  px-4">
+      <div className="flex items-center text-md text-gray-700 gap-2 mt-2  px-4">
         <MapPin className="w-5 h-5 text-gray-700" />
         <span>
           {item.address?.street || ""} {item.address?.houseStreet || ""},{" "}
@@ -106,19 +136,19 @@ const ItemDetails = () => {
         </span>
       </div>
 
-      <div className="flex items-center text-gray-700 gap-2 mt-1  px-4">
+      <div className="flex items-center text-md text-gray-700 gap-2 mt-1  px-4">
         <Calendar className="w-5 h-5 text-gray-700" />
         <span>Posted on: {formatDate(item.createdAt)}</span>
       </div>
 
-      <div className="flex items-center text-gray-700 gap-2 mt-1  px-4">
+      <div className="flex items-center text-md text-gray-700 gap-2 mt-1  px-4">
         <Clock className="w-5 h-5 text-gray-700" />
         <span>Collection Time: {formatDateTime(item.collectionTime)}</span>
       </div>
 
       <div className="text-black mt-4 px-4">
         <span className="block font-bold text-lg mb-1">Description</span>
-        <p className="font-normal">{item.description}</p>
+        <p className="font-normal text-md">{item.description}</p>
       </div>
 
       <div className="text-black mt-4 px-4">
@@ -135,6 +165,7 @@ const ItemDetails = () => {
         />
         <button
           onClick={handleSendMessage}
+          disabled={sending}
           className="block mt-4 mx-auto w-40 bg-gray-600 font-bold text-white p-2 rounded-full hover:bg-green-500 hover:text-gray-900 transition-colors duration-300"
         >
           Send message
