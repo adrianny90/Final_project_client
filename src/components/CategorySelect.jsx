@@ -1,11 +1,11 @@
-const CategorySelect = ({ value, onChange}) => (
+const CategorySelect = ({ value, onChange }) => (
   <div className="category-div">
-    <label className="category-label" htmlFor="title"></label>
+    <label className="category-label" htmlFor="category"></label>
     <select
       id="category"
       name="category"
-      value={value || ''}
-      onChange={(e) => onChange(e.target.value)}
+      value={value || ""}
+      onChange={onChange}
       required
     >
       <option value="">All Categories</option>
