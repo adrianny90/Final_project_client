@@ -12,7 +12,7 @@ const ItemMap = () => {
     const {user} = useContext(AuthContext);
 
     const [position,setPosition] = useState([52.5200, 13.4050])
-    const [selectedCategory,setSelectedCategory] = useState(null);
+    const [selectedCategory,setSelectedCategory] = useState('');
     const [loading,setLoading] = useState(false);
     const [items,setItems] = useState([])
     const [selectedItem, setSelectedItem] = useState(null);
@@ -63,8 +63,8 @@ const ItemMap = () => {
             onChange={(e)=> setSearchQuery(e.target.value)}
         />
         <CategorySelect 
-        selectedCategory={selectedCategory} 
-        onCategoryChange={setSelectedCategory}
+        value={selectedCategory} 
+        onChange={setSelectedCategory}
         />
         <label htmlFor="distance" className="text-black"></label>
         <select name="distance" id="distance" className="category-div mt-5">
