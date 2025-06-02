@@ -52,6 +52,8 @@ export const verifyUser = async (token) => {
       headers: { "Content-Type": "application/json" },
     }
   );
+  console.log(res);
+
   if (!res.ok) {
     const errorData = await res.json();
     throw new Error(errorData.error || "Error while verifying user");
