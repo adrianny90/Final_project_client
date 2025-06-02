@@ -2,23 +2,21 @@ import { useContext, useEffect, useState } from "react";
 import PhotoUpload from "../components/PhotoUpload";
 import CategorySelect from "../components/CategorySelect";
 import Map from "../components/Map.jsx";
-// import formDataBuilder from "../utils/formDataBuilder.js";
 import cloudinaryUpload from "../utils/cloudinarayUpload.js";
 import axios from "axios";
-
 import Spinner from "../components/Spinner.jsx";
 import { AuthContext } from "../context/AuthContextProvider.jsx";
-// import { useContext, createContext } from "react";
 
 const AddPost = () => {
   const { user } = useContext(AuthContext);
 
   //storage for formdata
   const [formData, setFormData] = useState({
-    photos: [],
+    postType: "",
     title: "",
     category: "",
     description: "",
+    photos: [],
     collectionTime: "",
     address: {
       street: "",
@@ -34,7 +32,7 @@ const AddPost = () => {
 
   const [previewUrls, setPreviewUrls] = useState([]); //storage for photo preview
   const [error, setError] = useState(null);
-  const [isSubmitting, setIsSubitting] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [successMsg, setSuccessMsg] = useState("");
 
   //storing input data while typing
@@ -104,19 +102,18 @@ const AddPost = () => {
     setError(null);
 
     try {
-      setIsSubitting(true);
+      setIsSubmitting(true);
 
       const coordinates = await getCoordinatesFromAddress();
-
       const uploadedPhotoUrls = await cloudinaryUpload(formData.photos);
 
       const dataToSend = {
+        postType: formData.postType,
         title: formData.title,
+        description: formData.description,
         userId: user?._id,
         category: formData.category,
-        description: formData.description,
-        collectionTime: formData.collectionTime,
-
+        photos: uploadedPhotoUrls,
         address: {
           ...formData.address,
           location: {
@@ -124,7 +121,7 @@ const AddPost = () => {
             coordinates: coordinates,
           },
         },
-        photos: uploadedPhotoUrls,
+        collectionTime: formData.collectionTime,
       };
 
       console.log("data to send:", dataToSend);
@@ -136,10 +133,11 @@ const AddPost = () => {
 
       // reset form after sendeing data
       setFormData({
-        photos: [],
+        postType: "", // <-- added
         title: "",
         category: "",
         description: "",
+        photos: [],
         collectionTime: "",
         address: {
           street: "",
@@ -159,14 +157,40 @@ const AddPost = () => {
       console.log("Error while submitting", error);
       setError(error.message || "Something went wrong while submitting");
     } finally {
-      setIsSubitting(false);
+      setIsSubmitting(false);
     }
   };
 
   return (
     <div className="Item-container">
-      <h2 className="item-header">Put a new item</h2>
+      <h2 className="item-header">Add an item</h2>
       <form className="item-form" onSubmit={handleSubmit}>
+        <div className="post-type-div">
+          <label>I would like to:</label>
+          <label>
+            <input
+              type="radio"
+              name="postType"
+              value="Offer"
+              checked={formData.postType === "Offer"}
+              onChange={handleChange}
+              disabled={isSubmitting}
+            />
+            Offer
+          </label>
+          <label>
+            <input
+              type="radio"
+              name="postType"
+              value="Request"
+              checked={formData.postType === "Request"}
+              onChange={handleChange}
+              disabled={isSubmitting}
+            />
+            Request
+          </label>
+        </div>
+
         <PhotoUpload
           previewUrls={previewUrls}
           error={error}
@@ -174,7 +198,7 @@ const AddPost = () => {
         />
         <div className="title-div">
           <label className="title-label" htmlFor="title">
-            Title:
+            Title
           </label>
           <input
             type="text"
@@ -205,7 +229,7 @@ const AddPost = () => {
         </div>
         <div className="collection-div">
           <label className=" collection-label" htmlFor="collectionTime">
-            Collection times
+            Collection time
           </label>
           <input
             type="text"
@@ -228,7 +252,7 @@ const AddPost = () => {
             disabled={isSubmitting}
           />
 
-          <label htmlFor="address.houseStreet">House number:</label>
+          <label htmlFor="address.houseStreet">House number</label>
           <input
             type="text"
             id="address.houseStreet"
@@ -238,7 +262,7 @@ const AddPost = () => {
             disabled={isSubmitting}
           />
 
-          <label htmlFor="address.postalCode">Postal Code:</label>
+          <label htmlFor="address.postalCode">Postal Code</label>
           <input
             type="text"
             id="address.postalCode"
@@ -248,7 +272,7 @@ const AddPost = () => {
             disabled={isSubmitting}
           />
 
-          <label htmlFor="address.city">City:</label>
+          <label htmlFor="address.city">City</label>
           <input
             type="text"
             id="address.city"
@@ -263,7 +287,7 @@ const AddPost = () => {
             type="submit"
             disabled={isSubmitting}
           >
-            {isSubmitting ? "Submitting..." : "Submit offer"}
+            {isSubmitting ? "Submitting..." : "Submit"}
           </button>
         </div>
       </form>

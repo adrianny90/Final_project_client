@@ -3,162 +3,205 @@
 /* @import url('https://unpkg.com/leaflet/dist/leaflet.css'); */
 
 body {
-    background-color: #09ef09;
+  background-color: #09ef09;
 }
 /* Container */
 .Item-container {
-    max-width: 600px;
-    margin: 2rem auto;
-    padding: 2rem;
-    background-color: #f3f8f4; /* sanftes grünlich-beiges Öko-Feeling */
-    border-radius: 16px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  }
-  
-  /* Überschrift */
-  .item-header {
-    font-size: 1.8rem;
-    margin-bottom: 1.5rem;
-    text-align: center;
-    color: #2f4f2f;
-  }
-  
-  /* Formular */
-  .item-form {
-    color: #2f4f2f;
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-  }
-  
-  /* Gemeinsames Styling für alle Eingabe-Bereiche */
-  .item-form input[type="text"],
-  .item-form textarea {
-    color: black;
-    width: 100%;
-    padding: 0.75rem;
-    border: 1px solid #d0d8cd;
-    border-radius: 12px;
-    background-color: #ffffff;
-    font-size: 1rem;
-    transition: border 0.3s ease, box-shadow 0.3s ease;
-  }
-  .category-div {
-    color: #2f4f2f;
-    width: 100%;
-    padding: 0.75rem;
-    border: 1px solid #d0d8cd;
-    border-radius: 12px;
-    background-color: #ffffff;
-    font-size: 1rem;
-    transition: border 0.3s ease, box-shadow 0.3s ease;
-    outline: none;
-    border-color: #7ca982;
-    box-shadow: 0 0 0 3px rgba(124, 169, 130, 0.3);
-  }
-  .item-form input[type="text"]:focus,
-  .item-form textarea:focus {
-    outline: none;
-    border-color: #7ca982;
-    box-shadow: 0 0 0 3px rgba(124, 169, 130, 0.3);
-  }
-  
-  /* Textarea Styling */
-  .description-div textarea {
-    resize: vertical;
-    min-height: 120px;
-  }
-  
-  /* Foto-Feld */
-  .img-div {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-  
-  .photo-label::before {
-    content: "📷 ";
-    font-size: 1.3rem;
-  }
-  
-  .img-div input[type="file"] {
-    padding: 1rem;
-    background-color: #e7f0ea;
-    border: 2px dashed #a3bfa7;
-    border-radius: 12px;
-    cursor: pointer;
-    font-size: 1rem;
-    transition: background-color 0.3s ease;
-  }
-  
-  .img-div input[type="file"]:hover {
-    background-color: #d7e9de;
-  }
-  
-  /* Submit Button */
-  .submit-button {
-    margin-top: 10px;
-    margin-bottom: 10px;
-    padding: 0.4rem 0.8rem;
-    background-color: #6ba979;
-    color: #fff;
-    border: none;
-    border-radius: 12px;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-  }
-  
-  .submit-button:hover {
-    background-color: #5a9668;
-    transform: scale(1.02);
-  }
-  
-  .submit-button:active {
-    transform: scale(0.98);
-  }
-  .error-message {
-    color: red;
-    font-size: 0.9rem;
-    margin-top: 0.5rem;
-  }
-  
-  .preview-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.75rem;
-    margin-top: 1rem;
-  }
-  
-  .preview-image {
-    width: 100px;
-    height: 100px;
-    object-fit: cover;
-    border-radius: 10px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-  }
-  .spinner {
-    margin-top:5px;
-    margin-left:40%;
-    height: 120px;
-    width:120px;
-    border: 6px solid;
-    border-color: rgb(119, 236, 17)blue rgb(230, 132, 14) rgb(255, 255, 0);
-    border-radius: 50%;
-    animation: spin 1.2s ease infinite;
-  }
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: #f3f8f4; /* sanftes grünlich-beiges Öko-Feeling */
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
 
-  @keyframes spin {
-    to {
-      transform: rotate(360deg);
-    }
+/* Überschrift */
+.item-header {
+  font-size: 1.8rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  color: #2f4f2f;
+}
+
+/* Post type */
+.post-type-div {
+  color: #333;
+  font-size: 1rem;
+  margin: 1.5rem 0;
+  padding: 1rem;
+  border: none;
+  display: flex;
+  align-items: center;
+  gap: 2rem; /* gap between Type: and radio buttons */
+}
+
+.post-type-label {
+  font-weight: 600;
+  min-width: 60px;
+}
+
+.post-type-options {
+  display: flex;
+  gap: 1.5rem; /* gap between Offer and Request */
+}
+
+.post-type-options label {
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  padding: 0.4rem 1.2rem;
+  border: 1px solid #bbb;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 1rem;
+}
+
+.post-type-options input[type="radio"] {
+  margin-right: 0.6rem; /* ✅ Adds space between radio button and label text */
+  accent-color: #007bff;
+  cursor: pointer;
+}
+
+.post-type-options label:hover {
+  background-color: #e9f3ff;
+  border-color: #007bff;
+}
+
+/* Formular */
+.item-form {
+  color: #2f4f2f;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Gemeinsames Styling für alle Eingabe-Bereiche */
+.item-form input[type="text"],
+.item-form textarea {
+  color: black;
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #d0d8cd;
+  border-radius: 12px;
+  background-color: #ffffff;
+  font-size: 1rem;
+  transition: border 0.3s ease, box-shadow 0.3s ease;
+}
+.category-div {
+  color: #2f4f2f;
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #d0d8cd;
+  border-radius: 12px;
+  background-color: #ffffff;
+  font-size: 1rem;
+  transition: border 0.3s ease, box-shadow 0.3s ease;
+  outline: none;
+  border-color: #7ca982;
+  box-shadow: 0 0 0 3px rgba(124, 169, 130, 0.3);
+}
+.item-form input[type="text"]:focus,
+.item-form textarea:focus {
+  outline: none;
+  border-color: #7ca982;
+  box-shadow: 0 0 0 3px rgba(124, 169, 130, 0.3);
+}
+
+/* Textarea Styling */
+.description-div textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+/* Foto-Feld */
+.img-div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.photo-label::before {
+  content: "📷 ";
+  font-size: 1.3rem;
+}
+
+.img-div input[type="file"] {
+  padding: 1rem;
+  background-color: #e7f0ea;
+  border: 2px dashed #a3bfa7;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+}
+
+.img-div input[type="file"]:hover {
+  background-color: #d7e9de;
+}
+
+/* Submit Button */
+.submit-button {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  padding: 0.4rem 0.8rem;
+  background-color: #6ba979;
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.submit-button:hover {
+  background-color: #5a9668;
+  transform: scale(1.02);
+}
+
+.submit-button:active {
+  transform: scale(0.98);
+}
+.error-message {
+  color: red;
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+}
+
+.preview-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.preview-image {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+.spinner {
+  margin-top: 5px;
+  margin-left: 40%;
+  height: 120px;
+  width: 120px;
+  border: 6px solid;
+  border-color: rgb(119, 236, 17) blue rgb(230, 132, 14) rgb(255, 255, 0);
+  border-radius: 50%;
+  animation: spin 1.2s ease infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
   }
-  
+}
+
 .map-container {
-  width:100%;
+  width: 100%;
   height: 100%;
-  
-
 }
 
 .highlight-marker {
@@ -166,40 +209,35 @@ body {
 }
 .mapPage-Container {
   display: flex;
-  flex-wrap:wrap;
+  flex-wrap: wrap;
   /* background: linear-gradient(to bottom, #d2f8d2, #f5f5dc); */
   background-color: rgb(61, 71, 90);
-  
+
   flex-direction: row;
-  gap:16px;
+  gap: 16px;
   height: 100vh;
 }
 .map-container {
-  width: 100%; 
-  height:100%;
-  
-  
+  width: 100%;
+  height: 100%;
 }
 
 .fieldset-map {
   flex: 0 0 200px;
   padding: 16px;
-
 }
-
 
 .map {
   min-width: 320px;
   height: 500px;
   flex: 1;
-  padding:5px;
+  padding: 5px;
 }
-
 
 .leaflet-popup-content {
   min-width: 200px;
 }
 
 .distance {
-  width: ;
+  width: 100%;
 }
