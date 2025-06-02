@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { MapPin, Calendar, Clock } from "lucide-react";
+import { MapPin, Calendar, Clock, Gift, FilePen } from "lucide-react";
 import axios from "axios";
 import { useAuth } from "../hooks/useAuth.js";
 
@@ -96,11 +96,13 @@ const ItemDetails = () => {
   if (loading) return <p>Loading...</p>;
   if (!item) return <p>Item not found.</p>;
 
+  const PostTypeIcon = item.postType === "Offer" ? Gift : FilePen;
+
   return (
     <div className="max-w-3xl mx-auto p-2 bg-gray-200 rounded-xl overflow-hidden">
       <div className="relative w-full h-72">
         <img
-          src={item.photos[currentImage] || "/image/item.jpg"}
+          src={item?.photos?.[currentImage] || "/image/item.jpg"}
           className="w-full h-72 object-cover rounded-md"
         />
         {item.photos.length > 1 && (
@@ -139,6 +141,11 @@ const ItemDetails = () => {
       <div className="flex items-center text-md text-gray-700 gap-2 mt-1  px-4">
         <Calendar className="w-5 h-5 text-gray-700" />
         <span>Posted on: {formatDate(item.createdAt)}</span>
+      </div>
+
+      <div className="flex items-center text-md text-gray-700 gap-2 mt-1  px-4">
+        <PostTypeIcon className="w-5 h-5 text-gray-700" />
+        <span>Post type: {item.postType}</span>
       </div>
 
       <div className="flex items-center text-md text-gray-700 gap-2 mt-1  px-4">

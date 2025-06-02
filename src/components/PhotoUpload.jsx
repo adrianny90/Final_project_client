@@ -10,7 +10,7 @@ const PhotoUpload = ({ previewUrls, error, onChange }) => (
       accept="image/*"
       multiple
       onChange={onChange}
-      required
+      //required
     />
     {error && <p className="error-message">{error}</p>}
     <div className="preview-grid">

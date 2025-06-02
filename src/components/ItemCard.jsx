@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { MapPin, Calendar } from "lucide-react";
+import { MapPin, Calendar, Gift, FilePen } from "lucide-react";
 
 const formatDate = (dateString) => {
   const date = new Date(dateString);
@@ -11,10 +11,12 @@ const formatDate = (dateString) => {
 };
 
 const ItemCard = ({ item }) => {
+  const PostTypeIcon = item.postType === "Offer" ? Gift : FilePen;
+
   return (
     <div className="bg-gray-200 rounded-xl overflow-hidden text-black">
       <img
-        src={Array.isArray(item.photos) ? item.photos[0] : "/image/item.jpg"}
+        src={item.photos?.[0] ?? "/image/item.jpg"}
         alt={item.title}
         className="h-60 w-full"
       />
@@ -36,6 +38,11 @@ const ItemCard = ({ item }) => {
         <div className="flex items-center text-sm text-gray-700 gap-1">
           <Calendar className="w-4 h-4 text-gray-700" />
           <span>{formatDate(item.createdAt)}</span>
+        </div>
+
+        <div className="flex items-center text-sm text-gray-700 gap-1 mt-1">
+          <PostTypeIcon className="w-4 h-4 text-gray-700" />
+          <span>{item.postType}</span>
         </div>
       </div>
     </div>
