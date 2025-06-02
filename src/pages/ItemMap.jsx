@@ -124,6 +124,7 @@ const ItemMap = () => {
               center={position}
               selectedItem={selectedItem}
               onItemSelect={handleItemSelect}
+              radius={parseInt(selectedRadius)}
             />
     
             {/* Item-Popup */}

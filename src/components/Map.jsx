@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup,Circle } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import markerIcon from 'leaflet/dist/images/marker-icon.png';
 import markerShadow from 'leaflet/dist/images/marker-shadow.png';
+
 import ItemCard from "./ItemCard";
 
 const DefaultIcon = L.icon({
@@ -25,7 +26,7 @@ const HighlightIcon = L.icon({
   className: 'highlight-marker'
 });
 
-const Map = ({ items = [], center, selectedItem, onItemSelect }) => {
+const Map = ({ items = [], center, selectedItem, onItemSelect,radius }) => {
   const [map, setMap] = useState(null);
 
   useEffect(() => {
@@ -60,6 +61,23 @@ const Map = ({ items = [], center, selectedItem, onItemSelect }) => {
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
+      {radius && (
+
+      <>
+      <Circle 
+        center={center}
+        radius={parseInt(radius)}
+        pathOptions={{color: "blue", fillColor: "#a3cfff", fillOpacity: 0.3}}
+        />
+        <Marker
+          position={center}
+          icon={DefaultIcon}
+          >
+            <Popup>SearchCenter</Popup>
+          </Marker>
+          </>
+      )}
+      {/* all item-Marker */}
       {displayItems.map((item) => {
         const coords = item?.address?.location?.coordinates;
         const position = Array.isArray(coords) && coords.length === 2
@@ -69,6 +87,8 @@ const Map = ({ items = [], center, selectedItem, onItemSelect }) => {
         
         const isSelected = selectedItem && selectedItem.id === item.id;
         const isDefaultMarker = item.id === 'default-marker';
+
+      
 
         return (
           <Marker
