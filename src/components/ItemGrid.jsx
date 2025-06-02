@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import ItemCard from "./ItemCard";
+import Spinner from "./Spinner";
 
 const ItemGrid = ({ selectedCategories }) => {
   const [items, setItems] = useState([]);
@@ -36,9 +37,7 @@ const ItemGrid = ({ selectedCategories }) => {
       ? items.filter((item) => selectedCategories.includes(item.category))
       : items;
 
-  if (loading) {
-    return <div className="loading-message">Loading items...</div>;
-  }
+  if (loading) return <Spinner />;
 
   if (error) {
     return <div className="error-message">{error}</div>;
