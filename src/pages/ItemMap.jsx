@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import CategorySelect from "../components/CategorySelect";
 import Spinner from "../components/Spinner";
 import axios from "axios";
-import { fetchItemsByCategory,fetchAllItems } from "../utils/fetching";
+// import { fetchItemsByCategory,fetchAllItems } from "../utils/fetching";
 import { AuthContext } from "../context/AuthContextProvider";
 import { useContext } from "react";
 
