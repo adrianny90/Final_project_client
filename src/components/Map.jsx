@@ -26,17 +26,17 @@ const HighlightIcon = L.icon({
   className: 'highlight-marker'
 });
 
-const Map = ({ items = [], center, selectedItem, onItemSelect,radius }) => {
+const Map = ({ items = [], center, selectedItem, onItemSelect,radius,onMapClick }) => {
   const [map, setMap] = useState(null);
 
   useEffect(() => {
-    if (map && (center || selectedItem?.address?.location?.coordinates)) {
-      const newCenter = selectedItem?.address?.location?.coordinates
-        ? [selectedItem.address.location.coordinates[1], selectedItem.address.location.coordinates[0]]
-        : center;
-      map.flyTo(newCenter, 15);
+    if (map && center) {
+      const newCenter = Array.isArray(center)
+      ? center
+      : [center.lat, center.lng];
+      map.flyTo(center, 15);
     }
-  }, [map, center, selectedItem]);
+  }, [map, center?.lat,center?.lng]);// selectedItem
 
   // Default-Marker when nothing is selected
   const displayItems = items.length > 0 
@@ -56,6 +56,13 @@ const Map = ({ items = [], center, selectedItem, onItemSelect,radius }) => {
       zoom={13} 
       scrollWheelZoom={false}
       whenCreated={setMap}
+      eventHandlers={{
+        click: (e)=>{
+          if (onMapClick) {
+            onMapClick(e.latlng);
+          }
+        }
+      }}
     >
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -102,14 +109,7 @@ const Map = ({ items = [], center, selectedItem, onItemSelect,radius }) => {
             <Popup>
               <div>
                 <ItemCard item={item}/>
-                {/* <h3>{item.title || item.name}</h3>
-                {!isDefaultMarker && (
-                  <>
-                    <p>{item.description}</p>
-                    {item.category && <p>Category: {item.category}</p>}
-                    {isSelected && <p>✓ Selected</p>}
-                  </>
-                )} */}
+               
               </div>
             </Popup>
           </Marker>
