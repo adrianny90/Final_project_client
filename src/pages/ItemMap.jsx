@@ -20,6 +20,11 @@ const ItemMap = () => {
     const [selectedItem, setSelectedItem] = useState(null);
     const [loading,setLoading] = useState(false);
 
+    const handleClickOnMap = () => {
+        const {lat,lng} = latLng;
+        setPosition([lat,lng]); 
+    }
+
     useEffect(() => {
         const fetchItems = async () => {
           setLoading(true);
@@ -124,10 +129,12 @@ const ItemMap = () => {
               center={position}
               selectedItem={selectedItem}
               onItemSelect={handleItemSelect}
+              radius={parseInt(selectedRadius)}
+              onMapClick ={handleClickOnMap}
             />
     
-            {/* Item-Popup */}
-            {selectedItem && (
+            {/* Item-Popup ----using the itemcard in MapComponent*/}
+            {/* {selectedItem && (
               <div className="absolute bottom-4 left-4 right-4 bg-white p-4 rounded shadow-lg z-10">
                 <h3 className="font-bold">{selectedItem.title}</h3>
                 <p>{selectedItem.description}</p>
@@ -138,8 +145,10 @@ const ItemMap = () => {
                   Close
                 </button>
               </div>
-            )}
+            )} */}
           </div>
+          
+          
         </div>
       );
     };
