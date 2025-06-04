@@ -18,10 +18,10 @@ const ItemCard = ({ item }) => {
       <img
         src={item.photos?.[0] ?? "/image/item.jpg"}
         alt={item.title}
-        className="h-60 w-full"
+        className="h-60 w-full object-cover"
       />
       <div className="p-2">
-        <Link to={`items/${item._id}`}>
+        <Link to={`/get/items/${item._id}`}>
           <h2 className="font-bold">
             {item.title.length > 30
               ? item.title.slice(0, 30) + "..."
