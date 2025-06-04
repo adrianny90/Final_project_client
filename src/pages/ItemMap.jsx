@@ -5,6 +5,7 @@ import Spinner from "../components/Spinner";
 import axios from "axios";
 import { AuthContext } from "../context/AuthContextProvider";
 import { useContext } from "react";
+import {OpenStreetMapProvider} from 'leaflet-geosearch'
 
 const ItemMap = () => {
   const { user } = useContext(AuthContext);
@@ -74,6 +75,13 @@ const ItemMap = () => {
     }
   };
 
+  const osmProvider = new OpenStreetMapProvider({
+    params: {
+      countrycodes: 'de',
+      addressdetails: 1,
+    },
+  });
+
   const handleAddressSearch = async () => {
     if (!address.street || !address.postalCode || !address.city) {
       alert("Please fill in street, postal code, and city.");
@@ -82,22 +90,14 @@ const ItemMap = () => {
 
     try {
       setLoading(true);
-      const response = await axios.get(
-        `https://nominatim.openstreetmap.org/search`,
-        {
-          params: {
-            format: "json",
-            street: `${address.number} ${address.street}`,
-            postalcode: address.postalCode,
-            city: address.city,
-            country: "Germany", // Optional: restrict to a country
-          },
-        }
-      );
+      const query = `${address.street} ${address.number}, ${address.postalCode} ${address.city}`;
+      const results = await osmProvider.search({ query });
 
-      if (response.data[0]) {
-        const { lat, lon } = response.data[0];
-        setPosition([parseFloat(lat), parseFloat(lon)]);
+      if (results.length > 0) {
+        // result is  [lon, lat]
+        const { x: lon, y: lat } = results[0];
+        console.log(results)
+        setPosition([lat, lon]); // converting [lat, lng]
       } else {
         alert("Address not found. Please check your input.");
       }
@@ -191,13 +191,15 @@ const ItemMap = () => {
       </fieldset>
 
       {/* Map */}
-      <div className="map">
+      <div className="map1">
         <Map
+          key={`${position[0]}-${position[1]}-${selectedRadius}`}
           items={items}
           center={position}
           selectedItem={selectedItem}
           onItemSelect={handleItemSelect}
           radius={parseInt(selectedRadius)}
+          address={address}
           onMapClick={handleClickOnMap}
           onCenterChange={handleCenterChange}
         />

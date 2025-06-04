@@ -25,15 +25,19 @@ const HighlightIcon = L.icon({
   className: "highlight-marker",
 });
 
-const Map = ({ items = [], center, selectedItem, onItemSelect, radius, onCenterChange, onMapClick }) => {
+const Map = ({ items = [], center, selectedItem, onItemSelect, radius, onCenterChange, onMapClick,address }) => {
   const [map, setMap] = useState(null);
   const [currentCenter, setCurrentCenter] = useState(center || [52.5200, 13.4050]);
+
+
 
   useEffect(() => {
     if (map && center) {
       const newCenter = Array.isArray(center) ? center : [center.lat, center.lng];
       setCurrentCenter(newCenter);
-      map.flyTo(newCenter, 15);
+      map.flyTo(newCenter, 15,{
+        duration:1 
+      });
     }
   }, [map, center]);
 

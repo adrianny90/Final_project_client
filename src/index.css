@@ -234,6 +234,16 @@ body {
   padding: 5px;
 }
 
+.map1 {
+  min-width: 320px;
+  min-height: 500px;
+  flex: 1;
+  padding: 5px;
+}
+
+
+
+
 .leaflet-popup-content {
   min-width: 200px;
 }
