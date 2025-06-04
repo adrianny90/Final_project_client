@@ -2,32 +2,28 @@ import { Link } from "react-router-dom";
 
 const HomePage = () => {
   return (
-    <div>
-      <div className="absolute inset-0 w-full h-full z-[-2] overflow-hidden">
+    <div className="relative min-h-screen w-full overflow-hidden">
+      <div className="absolute inset-0 z-[0]">
         <video
           autoPlay
           muted
           loop
           playsInline
-          style={{ filter: "brightness(1.2)" }}
+          className="w-full h-full object-cover"
+          style={{ filter: "brightness(1.1)" }}
           preload="auto"
-          onError={() => {
-            console.error("Video failed to load:");
-          }}
-          //onLoadedData={() => console.log("Video loaded successfully")}
+          onError={() => console.error("Video failed to load")}
         >
           <source src="/video/video.mp4" type="video/mp4" />
           Your browser does not support the video tag.
         </video>
       </div>
-      <div className="  flex items-center flex-col bg-gradient-to-b from-white/100 to-transparent ">
-        <div className="">
-          <h1 className="text-xl font-bold py-4 text-gray-900">
+      <div className="relative flex flex-col items-center justify-center min-h-screen ">
+        <div className="max-w-lg w-full text-center">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold py-4 text-gray-900">
             Welcome to BerlinGive – Share and Connect in Berlin!
           </h1>
-        </div>
-        <div className="max-w-md">
-          <p className="py-2 text-black">
+          <p className="py-2 text-base sm:text-lg text-black">
             BerlinGive is your go-to platform for giving away and finding free
             items in Berlin. Whether you want to declutter by sharing unused
             stuff or discover something new nearby, we’ve got you covered. Use
@@ -36,14 +32,14 @@ const HomePage = () => {
             happening in your neighborhood. Join our community and make the most
             of Berlin’s sharing spirit!
           </p>
-        </div>
-        <div className="py-6 flex items-center">
-          <Link
-            to="/give"
-            className="btn border border-gray-300 rounded-full hover:bg-green-500 hover:text-gray-900 transition-colors duration-300 "
-          >
-            Get Started
-          </Link>
+          <div className="py-6">
+            <Link
+              to="/give"
+              className="inline-block px-6 py-3 border border-gray-800 rounded-full text-gray-900 hover:bg-green-500 hover:text-gray-900 transition-colors duration-300"
+            >
+              Get Started
+            </Link>
+          </div>
         </div>
       </div>
     </div>
