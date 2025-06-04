@@ -19,6 +19,7 @@ const Panel = () => {
   const [selectedDetailItemId, setSelectedDetailItemId] = useState(null);
   const [chat, setChat] = useState("");
   const [sending, setSending] = useState(false);
+  const [owner, setOwner] = useState();
 
   const handlePersonalData = () => {
     setShowData((prev) => !prev);
@@ -72,6 +73,7 @@ const Panel = () => {
       const fetchMessagesAndItems = async () => {
         setLoading(true);
         try {
+          // fetch all items that user is either receiver of message or sender
           const res = await fetch(
             `${import.meta.env.VITE_API_BASE_URL}/message/user`,
             {
@@ -84,13 +86,14 @@ const Panel = () => {
           if (!res.ok) {
             throw new Error("Failed to fetch messages");
           }
-          const messagesData = await res.json();
+          const messagesData = await res.json(); // all  messages data
 
           const itemIds = [...new Set(messagesData.map((msg) => msg.itemId))];
-          console.log("messages Users", itemIds);
+          console.log("messages Users", messagesData);
 
           setMessages(messagesData);
 
+          /// fetching all items that have any message
           const itemsRes = await fetch(
             `${import.meta.env.VITE_API_BASE_URL}/items/user`,
             {
@@ -106,6 +109,24 @@ const Panel = () => {
           const itemsData = await itemsRes.json();
           console.log("itemsData:", itemsData);
           setItems(itemsData || []);
+
+          ///fetch all owners of the items
+
+          const ownersRes = await fetch(
+            `${import.meta.env.VITE_API_BASE_URL}/users/items`,
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              credentials: "include",
+              body: JSON.stringify(itemsData),
+            }
+          );
+          if (!ownersRes.ok) {
+            throw new Error("Failed to fetch items");
+          }
+          const ownersDetails = await ownersRes.json();
+          setOwner(ownersDetails);
+          console.log("owners", ownersDetails);
         } catch (error) {
           toast.error(error.message);
         } finally {
@@ -171,13 +192,42 @@ const Panel = () => {
 
     try {
       setSending(true);
-      const dataToSend = {
-        content: chat,
-        receiverId: selectedItemId.userId,
-        senderId: user._id,
-        itemId: selectedItemId._id,
-      };
-      console.log("Sending message:", dataToSend);
+      let dataToSend = {};
+
+      if (selectedItemId.userId === user._id) {
+        const itemMessages = messages.filter(
+          (msg) => msg.itemId === selectedItemId._id
+        );
+
+        const lastMessage =
+          itemMessages.length > 0
+            ? itemMessages[itemMessages.length - 1]
+            : null;
+
+        if (!lastMessage) {
+          toast.error("No previous messages found for this item.");
+          setSending(false);
+          return;
+        }
+
+        dataToSend = {
+          content: chat,
+          receiverId: lastMessage.senderId,
+          senderId: user._id,
+          itemId: selectedItemId._id,
+          ownerId: user._id,
+        };
+        console.log("dataSent (owner)", dataToSend);
+      } else {
+        dataToSend = {
+          content: chat,
+          receiverId: selectedItemId.userId,
+          senderId: user._id,
+          itemId: selectedItemId._id,
+          ownerId: selectedItemId.userId,
+        };
+        console.log("dataSent (non-owner)", dataToSend);
+      }
 
       const response = await axios.post(
         `${import.meta.env.VITE_API_BASE_URL}/message`,
@@ -386,7 +436,9 @@ const Panel = () => {
                         {item.title}
                       </h3>
                       <p className="text-gray-400 text-xs sm:text-sm">
-                        Ad owner: {users[item.userId]?.firstName || "anonymous"}
+                        Ad owner:{" "}
+                        {owner.find((o) => o._id === item.userId)?.firstName ||
+                          "anonymous"}
                       </p>
                     </div>
                   ))}
@@ -417,7 +469,7 @@ const Panel = () => {
                       getConversationMessages(selectedItemId._id).map(
                         (message) => (
                           <div
-                            key={message.id}
+                            key={message._id}
                             className={`flex ${
                               message.senderId === user._id
                                 ? "justify-end"
@@ -434,21 +486,21 @@ const Panel = () => {
                               <div className="flex items-center mb-1">
                                 {message.senderId !== user._id && (
                                   <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-gray-500 flex items-center justify-center text-white mr-2 text-xs sm:text-sm">
-                                    {users[
-                                      items.find(
-                                        (item) => item._id === message.itemId
-                                      )?.userId
-                                    ]?.firstName?.[0] || ""}
+                                    {owner.find((o) =>
+                                      selectedItemId.userId === user._id
+                                        ? o._id === message.senderId
+                                        : o._id === selectedItemId.userId
+                                    )?.firstName?.[0] || ""}
                                   </div>
                                 )}
                                 <p className="font-semibold text-xs sm:text-sm">
                                   {message.senderId === user._id
                                     ? user.firstName
-                                    : users[
-                                        items.find(
-                                          (item) => item._id === message.itemId
-                                        )?.userId
-                                      ]?.firstName || "Ad owner"}
+                                    : owner.find((o) =>
+                                        selectedItemId.userId === user._id
+                                          ? o._id === message.senderId
+                                          : o._id === selectedItemId.userId
+                                      )?.firstName || "Recipient"}
                                 </p>
                               </div>
                               <p className="text-xs sm:text-sm">

@@ -69,6 +69,7 @@ const ItemDetails = () => {
         receiverId: item.userId,
         senderId: senderId,
         itemId: item._id,
+        ownerId: item.userId,
       };
       console.log("Sending message:", dataToSend);
 
