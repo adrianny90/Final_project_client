@@ -1,18 +1,16 @@
 import { useContext, useEffect, useState } from "react";
-import PhotoUpload from "../components/PhotoUpload";
-import CategorySelect from "../components/CategorySelect";
-import Map from "../components/Map.jsx";
-import cloudinaryUpload from "../utils/cloudinarayUpload.js";
-import axios from "axios";
-import Spinner from "../components/Spinner.jsx";
 import { AuthContext } from "../context/AuthContextProvider.jsx";
+import cloudinaryUpload from "../utils/cloudinaryUpload.js";
+import CategorySelect from "../components/CategorySelect";
+import PhotoUpload from "../components/PhotoUpload";
+import axios from "axios";
 
 const AddPost = () => {
   const { user } = useContext(AuthContext);
 
   //storage for formdata
   const [formData, setFormData] = useState({
-    postType: "",
+    postType: "Offer",
     title: "",
     category: "",
     description: "",
@@ -30,10 +28,9 @@ const AddPost = () => {
     },
   });
 
-  const [previewUrls, setPreviewUrls] = useState([]); //storage for photo preview
   const [error, setError] = useState(null);
+  const [previewUrls, setPreviewUrls] = useState([]); //storage for photo preview
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [successMsg, setSuccessMsg] = useState("");
 
   //storing input data while typing
   const handleChange = (e) => {
@@ -105,13 +102,16 @@ const AddPost = () => {
       setIsSubmitting(true);
 
       const coordinates = await getCoordinatesFromAddress();
-      const uploadedPhotoUrls = await cloudinaryUpload(formData.photos);
+      const uploadedPhotoUrls =
+        formData.photos.length > 0
+          ? await cloudinaryUpload(formData.photos)
+          : [];
 
       const dataToSend = {
         postType: formData.postType,
         title: formData.title,
         description: formData.description,
-        userId: user?._id,
+        userId: user._id,
         category: formData.category,
         photos: uploadedPhotoUrls,
         address: {
@@ -131,9 +131,9 @@ const AddPost = () => {
         dataToSend
       );
 
-      // reset form after sendeing data
+      // Reset form and previews only if submission succeeds
       setFormData({
-        postType: "", // <-- added
+        postType: "Offer",
         title: "",
         category: "",
         description: "",
@@ -152,22 +152,25 @@ const AddPost = () => {
       });
 
       setPreviewUrls([]);
-      setSuccessMsg("Item submitted succesfully");
+      alert("Item submitted successfully!");
     } catch (error) {
-      console.log("Error while submitting", error);
-      setError(error.message || "Something went wrong while submitting");
+      console.error("Error while submitting:", error);
+      setError(error.message || "Something went wrong while submitting.");
     } finally {
       setIsSubmitting(false);
     }
   };
 
   return (
-    <div className="Item-container">
-      <h2 className="item-header">Add an item</h2>
-      <form className="item-form" onSubmit={handleSubmit}>
-        <div className="post-type-div">
-          <label>I would like to:</label>
-          <label>
+    <div className="max-w-2xl mx-auto p-6 bg-gray-200 shadow-md rounded-lg">
+      <h2 className="text-2xl font-semibold mb-4 text-black text-center">
+        Add an item
+      </h2>
+      <form className="space-y-6" onSubmit={handleSubmit}>
+        {/* Post Type Selection */}
+        <div className="flex flex-col md:flex-row md:items-center md:space-x-4 space-y-2 md:space-y-0 mb-4">
+          <label className="text-black">I would like to</label>
+          <label className="flex items-center space-x-2 text-black">
             <input
               type="radio"
               name="postType"
@@ -175,10 +178,11 @@ const AddPost = () => {
               checked={formData.postType === "Offer"}
               onChange={handleChange}
               disabled={isSubmitting}
+              className=""
             />
-            Offer
+            <span>Offer</span>
           </label>
-          <label>
+          <label className="flex items-center space-x-2 text-black">
             <input
               type="radio"
               name="postType"
@@ -186,18 +190,15 @@ const AddPost = () => {
               checked={formData.postType === "Request"}
               onChange={handleChange}
               disabled={isSubmitting}
+              className=""
             />
-            Request
+            <span>Request</span>
           </label>
         </div>
 
-        <PhotoUpload
-          previewUrls={previewUrls}
-          error={error}
-          onChange={handleChange}
-        />
-        <div className="title-div">
-          <label className="title-label" htmlFor="title">
+        {/* Title Field */}
+        <div>
+          <label htmlFor="title" className="block text-black">
             Title
           </label>
           <input
@@ -208,28 +209,42 @@ const AddPost = () => {
             onChange={handleChange}
             disabled={isSubmitting}
             required
+            className="w-full border border-black rounded-md p-2 text-black"
           />
         </div>
 
+        {/* Category */}
         <CategorySelect value={formData.category} onChange={handleChange} />
 
-        <div className="description-div">
-          <label className="description-label" htmlFor="description">
+        {/* Description */}
+        <div>
+          <label htmlFor="description" className="block text-black">
             Description
           </label>
           <textarea
             id="description"
             name="description"
+            placeholder="Write a description here..."
             value={formData.description}
             onChange={handleChange}
             disabled={isSubmitting}
             required
-            rows={8}
+            rows={4}
+            className="w-full border border-black rounded-md p-2 text-black placeholder-gray-500 truncate whitespace-nowrap"
           />
         </div>
-        <div className="collection-div">
-          <label className=" collection-label" htmlFor="collectionTime">
-            Collection time
+
+        {/* Photo Upload */}
+        <PhotoUpload
+          previewUrls={previewUrls}
+          error={error}
+          onChange={handleChange}
+        />
+
+        {/* Collection Time */}
+        <div>
+          <label htmlFor="collectionTime" className="block text-black">
+            Collection time (optional)
           </label>
           <input
             type="text"
@@ -238,65 +253,82 @@ const AddPost = () => {
             value={formData.collectionTime}
             disabled={isSubmitting}
             onChange={handleChange}
+            className="w-full border border-black rounded-md p-2 text-black"
           />
         </div>
 
-        <div className="address-group">
-          <label htmlFor="address.street">Street:</label>
-          <input
-            type="text"
-            id="address.street"
-            name="address.street"
-            value={formData.address.street}
-            onChange={handleChange}
-            disabled={isSubmitting}
-          />
+        {/* Address Fields */}
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div>
+            <label htmlFor="address.street" className="block text-black">
+              Street
+            </label>
+            <input
+              type="text"
+              id="address.street"
+              name="address.street"
+              value={formData.address.street}
+              onChange={handleChange}
+              disabled={isSubmitting}
+              className="w-full border border-black rounded-md p-2 text-black"
+            />
+          </div>
 
-          <label htmlFor="address.houseStreet">House number</label>
-          <input
-            type="text"
-            id="address.houseStreet"
-            name="address.houseStreet"
-            value={formData.address.houseStreet}
-            onChange={handleChange}
-            disabled={isSubmitting}
-          />
+          <div>
+            <label htmlFor="address.houseStreet" className="block text-black">
+              House number
+            </label>
+            <input
+              type="text"
+              id="address.houseStreet"
+              name="address.houseStreet"
+              value={formData.address.houseStreet}
+              onChange={handleChange}
+              disabled={isSubmitting}
+              className="w-full border border-black rounded-md p-2 text-black"
+            />
+          </div>
 
-          <label htmlFor="address.postalCode">Postal Code</label>
-          <input
-            type="text"
-            id="address.postalCode"
-            name="address.postalCode"
-            value={formData.address.postalCode}
-            onChange={handleChange}
-            disabled={isSubmitting}
-          />
+          <div>
+            <label htmlFor="address.postalCode" className="block text-black">
+              Postal Code
+            </label>
+            <input
+              type="text"
+              id="address.postalCode"
+              name="address.postalCode"
+              value={formData.address.postalCode}
+              onChange={handleChange}
+              disabled={isSubmitting}
+              className="w-full border border-black rounded-md p-2 text-black"
+            />
+          </div>
 
-          <label htmlFor="address.city">City</label>
-          <input
-            type="text"
-            id="address.city"
-            name="address.city"
-            value={formData.address.city}
-            onChange={handleChange}
-            disabled={isSubmitting}
-          />
-
-          <button
-            className="submit-button"
-            type="submit"
-            disabled={isSubmitting}
-          >
-            {isSubmitting ? "Submitting..." : "Submit"}
-          </button>
+          <div>
+            <label htmlFor="address.city" className="block text-black">
+              City
+            </label>
+            <input
+              type="text"
+              id="address.city"
+              name="address.city"
+              value={formData.address.city}
+              onChange={handleChange}
+              disabled={isSubmitting}
+              className="w-full border border-black rounded-md p-2 text-black"
+            />
+          </div>
         </div>
+
+        {/* Submit Button */}
+        <button
+          type="submit"
+          disabled={isSubmitting}
+          className="mt-8 w-full max-w-xs bg-gray-600 font-bold text-white p-2 rounded-full hover:bg-green-500 hover:text-gray-900 transition-colors duration-300 mx-auto block truncate whitespace-nowrap"
+        >
+          {isSubmitting ? "Submitting..." : "Submit"}
+        </button>
       </form>
-      {/* <Spinner /> */}
-      {isSubmitting && <Spinner />}
-      {successMsg && <p className="succes-message">{successMsg}</p>}
-      <div className="map-div">
-        <Map />
-      </div>
     </div>
   );
 };
