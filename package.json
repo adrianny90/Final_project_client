@@ -16,6 +16,7 @@
     "axios": "^1.9.0",
     "daisyui": "^5.0.35",
     "leaflet": "^1.9.4",
+    "leaflet-geosearch": "^4.2.0",
     "lucide-react": "^0.511.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
