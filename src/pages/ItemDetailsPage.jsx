@@ -3,7 +3,8 @@ import { useParams, Link } from "react-router-dom";
 import { MapPin, Calendar, Clock, Gift, FilePen } from "lucide-react";
 import axios from "axios";
 import { useAuth } from "../hooks/useAuth.js";
-import Map from "../components/Map.jsx"
+import Map from "../components/Map.jsx";
+import { toast } from "react-toastify";
 
 // Formatters
 const formatDate = (dateString) => {
@@ -38,7 +39,7 @@ const ItemDetails = () => {
   const { id } = useParams();
   const { user } = useAuth();
   console.log("User:", user);
-  const senderId = user?.userId;
+  const senderId = user?._id;
   console.log("Sender Id:", senderId);
 
   useEffect(() => {
@@ -76,7 +77,7 @@ const ItemDetails = () => {
         dataToSend
       );
 
-      alert("Message sent successfully!");
+      toast.success("Message sent successfully!");
       setMessage("");
     } catch (error) {
       console.error("Failed to send message:", error);
@@ -179,17 +180,18 @@ const ItemDetails = () => {
           Send message
         </button>
       </div>
-        <div className="map">
-        <Map 
-                center={item?.address?.location?.coordinates && [
-                    item.address.location.coordinates[1], // latitude
-                    item.address.location.coordinates[0]  // longitude
-                  ]}
-                items={[item]} //transform item to array
-                selectedItem={item} // select item for marker
+      <div className="map">
+        <Map
+          center={
+            item?.address?.location?.coordinates && [
+              item.address.location.coordinates[1], // latitude
+              item.address.location.coordinates[0], // longitude
+            ]
+          }
+          items={[item]} //transform item to array
+          selectedItem={item} // select item for marker
         />
-
-        </div>
+      </div>
 
       <Link
         to="/get"

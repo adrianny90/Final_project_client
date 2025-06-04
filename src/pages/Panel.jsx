@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import { updateUser } from "../utils/auth.js";
 import MyItemInPanel from "../components/MyItemInPanel.jsx";
+import axios from "axios";
 
 const Panel = () => {
   const { setUser, user } = useAuth();
@@ -16,6 +17,8 @@ const Panel = () => {
   const [selectedItemId, setSelectedItemId] = useState(null);
   const [showDetails, setShowDetails] = useState(false);
   const [selectedDetailItemId, setSelectedDetailItemId] = useState(null);
+  const [chat, setChat] = useState("");
+  const [sending, setSending] = useState(false);
 
   const handlePersonalData = () => {
     setShowData((prev) => !prev);
@@ -87,6 +90,7 @@ const Panel = () => {
           console.log("messages Users", itemIds);
 
           setMessages(messagesData);
+
           const itemsRes = await fetch(
             `${import.meta.env.VITE_API_BASE_URL}/items/user`,
             {
@@ -102,17 +106,6 @@ const Panel = () => {
           const itemsData = await itemsRes.json();
           console.log("itemsData:", itemsData);
           setItems(itemsData || []);
-          if (itemsData.length) {
-            const owner = await fetch(
-              `${import.meta.env.VITE_API_BASE_URL}/items/owner`,
-              {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(user),
-                credentials: "include",
-              }
-            );
-          }
         } catch (error) {
           toast.error(error.message);
         } finally {
@@ -159,7 +152,57 @@ const Panel = () => {
   const getConversationMessages = (itemId) => {
     return messages
       .filter((msg) => msg.itemId === itemId)
-      .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+      .sort((a, b) => {
+        const dateA = a.createdAt ? new Date(a.createdAt) : new Date(0);
+        const dateB = b.createdAt ? new Date(b.createdAt) : new Date(0);
+        return dateA - dateB;
+      });
+  };
+
+  const handleSendMessage = async (e) => {
+    e.preventDefault();
+    if (!chat.trim() || !selectedItemId?._id || !selectedItemId?.userId) {
+      console.log("Validation failed:", {
+        chat: chat.trim(),
+        selectedItemId,
+      });
+      return;
+    }
+
+    try {
+      setSending(true);
+      const dataToSend = {
+        content: chat,
+        receiverId: selectedItemId.userId,
+        senderId: user._id,
+        itemId: selectedItemId._id,
+      };
+      console.log("Sending message:", dataToSend);
+
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_BASE_URL}/message`,
+        dataToSend,
+        { withCredentials: true }
+      );
+
+      setMessages((prev) => {
+        const updatedMessages = [...prev, response.data];
+
+        return updatedMessages.sort((a, b) => {
+          const dateA = a.createdAt ? new Date(a.createdAt) : new Date(0);
+          const dateB = b.createdAt ? new Date(b.createdAt) : new Date(0);
+          return dateA - dateB;
+        });
+      });
+
+      toast.success("Message sent successfully!");
+      setChat("");
+    } catch (error) {
+      console.error("Failed to send message:", error);
+      toast.error(error.response?.data?.message || "Error sending message.");
+    } finally {
+      setSending(false);
+    }
   };
 
   return (
@@ -196,7 +239,7 @@ const Panel = () => {
           My Items
         </button>
       </div>
-
+      {/* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!              Personal details    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */}
       <div className="flex-1 p-4 md:p-8">
         {showData ? (
           <form
@@ -304,6 +347,7 @@ const Panel = () => {
             >
               Submit Changes
             </button>
+            {/* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!              Messages    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */}
           </form>
         ) : showMessage ? (
           <div className="w-full max-w-4xl mx-auto bg-gray-800 p-4 sm:p-6 rounded-lg shadow-lg flex flex-col md:flex-row">
@@ -324,7 +368,7 @@ const Panel = () => {
                   {items.map((item) => (
                     <div
                       key={item._id}
-                      onClick={() => setSelectedItemId(item._id)}
+                      onClick={() => setSelectedItemId(item)}
                       className={`p-4 bg-gray-700 rounded-lg shadow-md hover:bg-gray-600 cursor-pointer transition-colors duration-200 flex flex-col items-center ${
                         selectedItemId === item._id
                           ? "ring-2 ring-blue-500"
@@ -333,7 +377,7 @@ const Panel = () => {
                     >
                       <div className="w-full h-24 bg-gray-600 rounded-lg flex items-center justify-center overflow-hidden">
                         <img
-                          src={item.photos?.[0]}
+                          src={item.photos?.[0] || "/image/item.jpg"}
                           alt={item.title}
                           className="w-full h-full object-contain"
                         />
@@ -342,7 +386,7 @@ const Panel = () => {
                         {item.title}
                       </h3>
                       <p className="text-gray-400 text-xs sm:text-sm">
-                        Owner: {users[item.userId]?.firstName || "anonymous"}
+                        Ad owner: {users[item.userId]?.firstName || "anonymous"}
                       </p>
                     </div>
                   ))}
@@ -356,68 +400,96 @@ const Panel = () => {
               </h2>
               {selectedItemId ? (
                 <div className="flex flex-col h-[400px] sm:h-[500px]">
-                  <div className="flex-1 overflow-y-auto space-y-4 p-4 bg-gray-700 rounded-lg">
-                    {getConversationMessages(selectedItemId).length === 0 ? (
+                  <div
+                    className="flex-1 overflow-y-auto space-y-4 p-4 bg-gray-700 rounded-lg"
+                    ref={(el) => {
+                      if (el) {
+                        el.scrollTop = el.scrollHeight;
+                      }
+                    }}
+                  >
+                    {getConversationMessages(selectedItemId._id).length ===
+                    0 ? (
                       <p className="text-gray-300 text-sm sm:text-base">
                         No messages for this item.
                       </p>
                     ) : (
-                      getConversationMessages(selectedItemId).map((message) => (
-                        <div
-                          key={message.id}
-                          className={`flex ${
-                            message.senderId === user._id
-                              ? "justify-end"
-                              : "justify-start"
-                          }`}
-                        >
+                      getConversationMessages(selectedItemId._id).map(
+                        (message) => (
                           <div
-                            className={`max-w-[80%] sm:max-w-xs p-3 rounded-lg ${
+                            key={message.id}
+                            className={`flex ${
                               message.senderId === user._id
-                                ? "bg-blue-600 text-white"
-                                : "bg-gray-600 text-white"
+                                ? "justify-end"
+                                : "justify-start"
                             }`}
                           >
-                            <div className="flex items-center mb-1">
-                              {message.senderId !== user._id && (
-                                <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-gray-500 flex items-center justify-center text-white mr-2 text-xs sm:text-sm">
-                                  {users[
-                                    items.find(
-                                      (item) => item._id === message.itemId
-                                    )?.userId
-                                  ]?.firstName?.[0] || "?"}
-                                </div>
-                              )}
-                              <p className="font-semibold text-xs sm:text-sm">
-                                {message.senderId === user._id
-                                  ? user.firstName
-                                  : users[
+                            <div
+                              className={`max-w-[80%] sm:max-w-xs p-3 rounded-lg ${
+                                message.senderId === user._id
+                                  ? "bg-blue-600 text-white"
+                                  : "bg-gray-600 text-white"
+                              }`}
+                            >
+                              <div className="flex items-center mb-1">
+                                {message.senderId !== user._id && (
+                                  <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-gray-500 flex items-center justify-center text-white mr-2 text-xs sm:text-sm">
+                                    {users[
                                       items.find(
                                         (item) => item._id === message.itemId
                                       )?.userId
-                                    ]?.firstName || "Owner"}
+                                    ]?.firstName?.[0] || ""}
+                                  </div>
+                                )}
+                                <p className="font-semibold text-xs sm:text-sm">
+                                  {message.senderId === user._id
+                                    ? user.firstName
+                                    : users[
+                                        items.find(
+                                          (item) => item._id === message.itemId
+                                        )?.userId
+                                      ]?.firstName || "Ad owner"}
+                                </p>
+                              </div>
+                              <p className="text-xs sm:text-sm">
+                                {message.content}
+                              </p>
+                              <p className="text-xs text-gray-300 mt-1">
+                                {new Date(message.createdAt).toLocaleString(
+                                  "pl-PL",
+                                  {
+                                    year: "numeric",
+                                    month: "2-digit",
+                                    day: "2-digit",
+                                    hour: "2-digit",
+                                    minute: "2-digit",
+                                    second: "2-digit",
+                                  }
+                                )}
                               </p>
                             </div>
-                            <p className="text-xs sm:text-sm">
-                              {message.content}
-                            </p>
-                            <p className="text-xs text-gray-300 mt-1">
-                              {new Date(message.createdAt).toLocaleString()}
-                            </p>
                           </div>
-                        </div>
-                      ))
+                        )
+                      )
                     )}
                   </div>
-
-                  <form className="mt-4 flex gap-2">
+                  <form
+                    onSubmit={handleSendMessage}
+                    className="mt-4 flex gap-2"
+                  >
                     <input
                       type="text"
+                      name="chat"
                       placeholder="Type a message..."
+                      value={chat}
+                      onChange={(e) => setChat(e.target.value)}
+                      disabled={sending}
+                      required
                       className="flex-1 p-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm sm:text-base"
                     />
                     <button
                       type="submit"
+                      disabled={sending}
                       className="px-3 sm:px-4 py-2 bg-blue-700 text-white rounded-lg hover:bg-blue-600 transition-all duration-200 text-sm sm:text-base"
                     >
                       Send
@@ -430,6 +502,7 @@ const Panel = () => {
                 </p>
               )}
             </div>
+            {/* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!              My items    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */}
           </div>
         ) : showItems ? (
           <div className="w-full max-w-2xl mx-auto bg-gray-800 p-4 sm:p-6 rounded-lg shadow-lg">
