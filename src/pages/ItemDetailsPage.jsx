@@ -3,6 +3,7 @@ import { useParams, Link } from "react-router-dom";
 import { MapPin, Calendar, Clock, Gift, FilePen } from "lucide-react";
 import axios from "axios";
 import { useAuth } from "../hooks/useAuth.js";
+import Map from "../components/Map.jsx"
 
 // Formatters
 const formatDate = (dateString) => {
@@ -178,6 +179,17 @@ const ItemDetails = () => {
           Send message
         </button>
       </div>
+        <div className="map">
+        <Map 
+                center={item?.address?.location?.coordinates && [
+                    item.address.location.coordinates[1], // latitude
+                    item.address.location.coordinates[0]  // longitude
+                  ]}
+                items={[item]} //transform item to array
+                selectedItem={item} // select item for marker
+        />
+
+        </div>
 
       <Link
         to="/get"
