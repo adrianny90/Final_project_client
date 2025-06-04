@@ -11,7 +11,7 @@ const GetFreePage = () => {
       <div className="flex flex-col items-center">
         <Link
           to="/map"
-          className="px-4 py-2 bg-gray-600 text-white font-semibold rounded-lg hover:bg-green-500 hover:text-gray-900 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-green-400"
+          className="px-5 py-3 m-5 bg-gray-600 text-white font-semibold rounded-lg hover:bg-green-500 hover:text-gray-900 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-green-400"
         >
           Map
         </Link>

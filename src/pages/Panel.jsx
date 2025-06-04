@@ -12,10 +12,10 @@ const Panel = () => {
   const [messages, setMessages] = useState([]);
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [users, setUsers] = useState({}); // Store user data for item owners
-  const [selectedItemId, setSelectedItemId] = useState(null); // Track selected item for conversation
+  const [users, setUsers] = useState({});
+  const [selectedItemId, setSelectedItemId] = useState(null);
   const [showDetails, setShowDetails] = useState(false);
-  const [selectedDetailItemId, setSelectedDetailItemId] = useState(null); // Track item for details
+  const [selectedDetailItemId, setSelectedDetailItemId] = useState(null);
 
   const handlePersonalData = () => {
     setShowData((prev) => !prev);
@@ -101,8 +101,18 @@ const Panel = () => {
           }
           const itemsData = await itemsRes.json();
           console.log("itemsData:", itemsData);
-
           setItems(itemsData || []);
+          if (itemsData.length) {
+            const owner = await fetch(
+              `${import.meta.env.VITE_API_BASE_URL}/items/owner`,
+              {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(user),
+                credentials: "include",
+              }
+            );
+          }
         } catch (error) {
           toast.error(error.message);
         } finally {
@@ -153,11 +163,11 @@ const Panel = () => {
   };
 
   return (
-    <div className="flex min-h-screen bg-gray-900">
-      <div className="w-64 bg-gray-800 p-4 flex flex-col gap-2">
+    <div className="flex flex-col min-h-screen bg-gray-900 md:flex-row">
+      <div className="flex flex-col gap-2 p-4 bg-gray-800 w-full md:w-64 md:min-h-screen">
         <button
           onClick={handlePersonalData}
-          className={`px-4 py-2 text-white font-semibold rounded-lg hover:text-gray-900 transition-colors duration-300 ${
+          className={`w-full px-4 py-2 text-white font-semibold rounded-lg transition-colors duration-300 ${
             showData
               ? "bg-gray-400 hover:bg-green-500"
               : "bg-gray-600 hover:bg-green-800"
@@ -167,7 +177,7 @@ const Panel = () => {
         </button>
         <button
           onClick={handleMessages}
-          className={`px-4 py-2 text-white font-semibold rounded-lg hover:text-gray-900 transition-colors duration-300 ${
+          className={`w-full px-4 py-2 text-white font-semibold rounded-lg transition-colors duration-300 ${
             showMessage
               ? "bg-gray-400 hover:bg-green-500"
               : "bg-gray-600 hover:bg-green-800"
@@ -177,7 +187,7 @@ const Panel = () => {
         </button>
         <button
           onClick={handleItems}
-          className={`px-4 py-2 text-white font-semibold rounded-lg hover:text-gray-900 transition-colors duration-300 ${
+          className={`w-full px-4 py-2 text-white font-semibold rounded-lg transition-colors duration-300 ${
             showItems
               ? "bg-gray-400 hover:bg-green-500"
               : "bg-gray-600 hover:bg-green-800"
@@ -187,112 +197,128 @@ const Panel = () => {
         </button>
       </div>
 
-      <div className="flex-1 p-8">
+      <div className="flex-1 p-4 md:p-8">
         {showData ? (
           <form
             onSubmit={handleSubmit}
-            className="max-w-lg mx-auto bg-gray-800 p-6 rounded-lg shadow-lg"
+            className="w-full max-w-lg mx-auto bg-gray-800 p-4 sm:p-6 rounded-lg shadow-lg"
           >
-            <h2 className="text-2xl text-white font-semibold mb-6">
+            <h2 className="text-xl sm:text-2xl text-white font-semibold mb-4 sm:mb-6">
               Personal Information
             </h2>
-            <label className="block mb-4">
-              <span className="text-gray-300">First name:</span>
+            <label className="block mb-3 sm:mb-4">
+              <span className="text-gray-300 text-sm sm:text-base">
+                First name:
+              </span>
               <input
                 name="firstName"
                 value={user.firstName || ""}
                 onChange={handleChange}
-                className="mt-1 w-full p-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="mt-1 w-full p-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm sm:text-base"
                 placeholder="Enter first name"
               />
             </label>
-            <label className="block mb-4">
-              <span className="text-gray-300">Last name:</span>
+            <label className="block mb-3 sm:mb-4">
+              <span className="text-gray-300 text-sm sm:text-base">
+                Last name:
+              </span>
               <input
                 name="lastName"
                 value={user.lastName || ""}
                 onChange={handleChange}
-                className="mt-1 w-full p-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="mt-1 w-full p-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm sm:text-base"
                 placeholder="Enter last name"
               />
             </label>
-            <label className="block mb-4">
-              <span className="text-gray-300">Email:</span>
+            <label className="block mb-3 sm:mb-4">
+              <span className="text-gray-300 text-sm sm:text-base">Email:</span>
               <input
                 name="email"
                 value={user.email || ""}
                 onChange={handleChange}
-                className="mt-1 w-full p-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="mt-1 w-full p-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm sm:text-base"
                 placeholder="Enter email"
               />
             </label>
-            <label className="block mb-4">
-              <span className="text-gray-300">Street:</span>
+            <label className="block mb-3 sm:mb-4">
+              <span className="text-gray-300 text-sm sm:text-base">
+                Street:
+              </span>
               <input
                 name="address.street"
                 value={user.address?.street || ""}
                 onChange={handleChange}
-                className="mt-1 w-full p-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="mt-1 w-full p-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm sm:text-base"
                 placeholder="Enter street"
               />
             </label>
-            <label className="block mb-4">
-              <span className="text-gray-300">House number:</span>
+            <label className="block mb-3 sm:mb-4">
+              <span className="text-gray-300 text-sm sm:text-base">
+                House number:
+              </span>
               <input
                 name="address.houseStreet"
                 value={user.address?.houseStreet || ""}
                 onChange={handleChange}
-                className="mt-1 w-full p-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="mt-1 w-full p-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm sm:text-base"
                 placeholder="Enter house number"
               />
             </label>
-            <label className="block mb-4">
-              <span className="text-gray-300">Postal code:</span>
+            <label className="block mb-3 sm:mb-4">
+              <span className="text-gray-300 text-sm sm:text-base">
+                Postal code:
+              </span>
               <input
                 name="address.postalCode"
                 value={user.address?.postalCode || ""}
                 onChange={handleChange}
-                className="mt-1 w-full p-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="mt-1 w-full p-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm sm:text-base"
                 placeholder="Enter postal code"
               />
             </label>
-            <label className="block mb-4">
-              <span className="text-gray-300">City:</span>
+            <label className="block mb-3 sm:mb-6">
+              <span className="text-gray-300 text-sm sm:text-base">City:</span>
               <input
                 name="address.city"
                 value={user.address?.city || ""}
                 onChange={handleChange}
-                className="mt-1 w-full p-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="mt-1 w-full p-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm sm:text-base"
                 placeholder="Enter city"
               />
             </label>
-            <label className="block mb-6">
-              <span className="text-gray-300">Created:</span>
+            <label className="block mb-4 sm:mb-6">
+              <span className="text-gray-300 text-sm sm:text-base">
+                Created:
+              </span>
               <input
                 name="created"
                 value={user.createdAt?.split("T")[0] || ""}
                 disabled
-                className="mt-1 w-full p-2 bg-gray-600 text-white border border-gray-600 rounded-lg cursor-not-allowed"
+                className="mt-1 w-full p-2 bg-gray-600 text-white border border-gray-600 rounded-lg cursor-not-allowed text-sm sm:text-base"
                 placeholder="Creation date"
               />
             </label>
             <button
               type="submit"
-              className="w-full py-2 px-4 bg-blue-700 text-white rounded-lg hover:bg-blue-600 transition-all duration-200"
+              className="w-full py-2 px-4 bg-blue-700 text-white rounded-lg hover:bg-blue-600 transition-all duration-200 text-sm sm:text-base"
             >
               Submit Changes
             </button>
           </form>
         ) : showMessage ? (
-          <div className="max-w-4xl mx-auto bg-gray-800 p-6 rounded-lg shadow-lg flex">
-            <div className="w-1/3 pr-4 border-r border-gray-600">
-              <h2 className="text-2xl text-white font-semibold mb-6">
+          <div className="w-full max-w-4xl mx-auto bg-gray-800 p-4 sm:p-6 rounded-lg shadow-lg flex flex-col md:flex-row">
+            <div className="w-full md:w-1/3 md:pr-4 md:border-r md:border-gray-600 mb-4 md:mb-0">
+              <h2 className="text-xl sm:text-2xl text-white font-semibold mb-4 sm:mb-6">
                 Items with Messages
               </h2>
               {loading ? (
-                <p className="text-gray-300">Loading items...</p>
+                <p className="text-gray-300 text-sm sm:text-base">
+                  Loading items...
+                </p>
               ) : items.length === 0 ? (
-                <p className="text-gray-300">No items with messages found.</p>
+                <p className="text-gray-300 text-sm sm:text-base">
+                  No items with messages found.
+                </p>
               ) : (
                 <div className="space-y-4">
                   {items.map((item) => (
@@ -305,13 +331,17 @@ const Panel = () => {
                           : ""
                       }`}
                     >
-                      <img
-                        src={item.photos?.[0]}
-                        alt={item.title}
-                        className="w-full h-24 object-cover rounded-lg mb-2"
-                      />
-                      <h3 className="text-white font-semibold">{item.title}</h3>
-                      <p className="text-gray-400 text-sm">
+                      <div className="w-full h-24 bg-gray-600 rounded-lg flex items-center justify-center overflow-hidden">
+                        <img
+                          src={item.photos?.[0]}
+                          alt={item.title}
+                          className="w-full h-full object-contain"
+                        />
+                      </div>
+                      <h3 className="text-white font-semibold text-sm sm:text-base mt-2">
+                        {item.title}
+                      </h3>
+                      <p className="text-gray-400 text-xs sm:text-sm">
                         Owner: {users[item.userId]?.firstName || "anonymous"}
                       </p>
                     </div>
@@ -320,15 +350,15 @@ const Panel = () => {
               )}
             </div>
 
-            <div className="w-2/3 pl-4">
-              <h2 className="text-2xl text-white font-semibold mb-6">
+            <div className="w-full md:w-2/3 md:pl-4">
+              <h2 className="text-xl sm:text-2xl text-white font-semibold mb-4 sm:mb-6">
                 Conversation
               </h2>
               {selectedItemId ? (
-                <div className="flex flex-col h-[500px]">
+                <div className="flex flex-col h-[400px] sm:h-[500px]">
                   <div className="flex-1 overflow-y-auto space-y-4 p-4 bg-gray-700 rounded-lg">
                     {getConversationMessages(selectedItemId).length === 0 ? (
-                      <p className="text-gray-300">
+                      <p className="text-gray-300 text-sm sm:text-base">
                         No messages for this item.
                       </p>
                     ) : (
@@ -342,7 +372,7 @@ const Panel = () => {
                           }`}
                         >
                           <div
-                            className={`max-w-xs p-3 rounded-lg ${
+                            className={`max-w-[80%] sm:max-w-xs p-3 rounded-lg ${
                               message.senderId === user._id
                                 ? "bg-blue-600 text-white"
                                 : "bg-gray-600 text-white"
@@ -350,7 +380,7 @@ const Panel = () => {
                           >
                             <div className="flex items-center mb-1">
                               {message.senderId !== user._id && (
-                                <div className="w-8 h-8 rounded-full bg-gray-500 flex items-center justify-center text-white mr-2">
+                                <div className="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-gray-500 flex items-center justify-center text-white mr-2 text-xs sm:text-sm">
                                   {users[
                                     items.find(
                                       (item) => item._id === message.itemId
@@ -358,17 +388,19 @@ const Panel = () => {
                                   ]?.firstName?.[0] || "?"}
                                 </div>
                               )}
-                              <p className="font-semibold">
+                              <p className="font-semibold text-xs sm:text-sm">
                                 {message.senderId === user._id
-                                  ? "You"
+                                  ? user.firstName
                                   : users[
                                       items.find(
                                         (item) => item._id === message.itemId
                                       )?.userId
-                                    ]?.firstName || "Unknown"}
+                                    ]?.firstName || "Owner"}
                               </p>
                             </div>
-                            <p>{message.content}</p>
+                            <p className="text-xs sm:text-sm">
+                              {message.content}
+                            </p>
                             <p className="text-xs text-gray-300 mt-1">
                               {new Date(message.createdAt).toLocaleString()}
                             </p>
@@ -382,78 +414,109 @@ const Panel = () => {
                     <input
                       type="text"
                       placeholder="Type a message..."
-                      className="flex-1 p-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="flex-1 p-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm sm:text-base"
                     />
                     <button
                       type="submit"
-                      className="px-4 py-2 bg-blue-700 text-white rounded-lg hover:bg-blue-600 transition-all duration-200"
+                      className="px-3 sm:px-4 py-2 bg-blue-700 text-white rounded-lg hover:bg-blue-600 transition-all duration-200 text-sm sm:text-base"
                     >
                       Send
                     </button>
                   </form>
                 </div>
               ) : (
-                <p className="text-gray-300">
+                <p className="text-gray-300 text-sm sm:text-base">
                   Select an item to view the conversation.
                 </p>
               )}
             </div>
           </div>
         ) : showItems ? (
-          <div className="max-w-2xl mx-auto bg-gray-800 p-6 rounded-lg shadow-lg">
-            <h2 className="text-2xl text-white font-semibold mb-6">My Items</h2>
+          <div className="w-full max-w-2xl mx-auto bg-gray-800 p-4 sm:p-6 rounded-lg shadow-lg">
+            <h2 className="text-xl sm:text-2xl text-white font-semibold mb-4 sm:mb-6">
+              My Items
+            </h2>
             {loading ? (
-              <p className="text-gray-300">Loading items...</p>
+              <p className="text-gray-300 text-sm sm:text-base">
+                Loading items...
+              </p>
             ) : items.length === 0 ? (
-              <p className="text-gray-300">No items found.</p>
+              <p className="text-gray-300 text-sm sm:text-base">
+                No items found.
+              </p>
             ) : (
               <>
                 <div className="flex flex-col items-center gap-4">
                   {items.map((item) => (
                     <div
                       key={item._id}
-                      className="w-full md:w-140 p-4 bg-gray-700 rounded-lg shadow-md hover:bg-gray-600 transition-colors duration-200"
+                      className="w-full p-4 sm:p-6 bg-gray-700 rounded-xl shadow-lg hover:bg-gray-600 transition-colors duration-200"
                     >
-                      <img
-                        src={
-                          item.photos?.[0] ||
-                          "https://th.bing.com/th/id/OIP.e792CYPCRH59y_rdvSpfPAHaF8?rs=1&pid=ImgDetMain"
-                        }
-                        alt="Images are not available"
-                        className="w-full h-40 object-cover rounded-lg mb-4 text-white text-2xl"
-                      />
-                      <h3 className="text-white font-semibold text-lg">
-                        {item.title}
-                      </h3>
-                      <p className="text-gray-300">{item.description}</p>
-                      <p className="text-gray-400 text-sm">
-                        Category: {item.category}
-                      </p>
-                      {item.collectionTime && (
-                        <p className="text-gray-400 text-sm">
-                          Collection Time: {item.collectionTime}
+                      <div className="w-full h-32 sm:h-40 bg-gray-600 rounded-lg flex items-center justify-center overflow-hidden">
+                        <img
+                          src={
+                            item.photos?.[0] ||
+                            "https://th.bing.com/th/id/OIP.e792CYPCRH59y_rdvSpfPAHaF8?rs=1&pid=ImgDetMain"
+                          }
+                          alt={item.title || "Item image"}
+                          className="w-full h-full object-contain"
+                        />
+                      </div>
+                      <div className="mt-4 space-y-2">
+                        <h3 className="text-white text-center font-semibold text-xl sm:text-2xl">
+                          {item.title}
+                        </h3>
+                        <p className="text-white text-center text-sm sm:text-base">
+                          {item.description}
                         </p>
-                      )}
-                      {item.address && (
-                        <p className="text-gray-400 text-sm">
-                          Address: {item.address.street || ""}{" "}
-                          {item.address.houseStreet || ""},{" "}
-                          {item.address.city || ""}{" "}
-                          {item.address.postalCode || ""}
-                        </p>
-                      )}
-                      <p className="text-gray-400 text-sm">
-                        Created: {new Date(item.createdAt).toLocaleString()}
-                      </p>
-                      <button
-                        onClick={() => {
-                          setSelectedDetailItemId(item._id);
-                          setShowDetails(true);
-                        }}
-                        className="mt-2 px-3 py-1 bg-blue-700 text-white rounded-lg hover:bg-blue-600 transition-all duration-200"
-                      >
-                        View Details
-                      </button>
+                        <div className="text-xs sm:text-sm space-y-1">
+                          {item.collectionTime && (
+                            <p>
+                              <span className="text-gray-400">
+                                Collection Time:{" "}
+                              </span>
+                              <span className="text-white">
+                                {item.collectionTime}
+                              </span>
+                            </p>
+                          )}
+                          {item.address && (
+                            <p>
+                              <span className="text-gray-400">Address: </span>
+                              <span className="text-white">
+                                {item.address.street || ""}{" "}
+                                {item.address.houseStreet || ""}
+                                {item.address.city ? ", " : ""}
+                                {item.address.city || ""}{" "}
+                                {item.address.postalCode || ""}
+                              </span>
+                            </p>
+                          )}
+                          <p>
+                            <span className="text-gray-400">Created: </span>
+                            <span className="text-white">
+                              {new Date(item.createdAt).toLocaleString()}
+                            </span>
+                          </p>
+                          <p>
+                            <span className="text-gray-400">Category: </span>
+                            <span className="text-white">
+                              {item.category || "N/A"}
+                            </span>
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex justify-center w-full mt-4">
+                        <button
+                          onClick={() => {
+                            setSelectedDetailItemId(item._id);
+                            setShowDetails(true);
+                          }}
+                          className="px-4 sm:px-6 py-2 bg-gray-600 text-white font-semibold rounded-full hover:bg-green-500 hover:text-gray-900 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-green-400"
+                        >
+                          View Details
+                        </button>
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -470,7 +533,7 @@ const Panel = () => {
             )}
           </div>
         ) : (
-          <div className="text-white text-center">
+          <div className="text-white text-center text-sm sm:text-base">
             Select an option from the sidebar
           </div>
         )}
