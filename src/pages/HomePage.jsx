@@ -11,7 +11,7 @@ const HomePage = () => {
           playsInline
           className="w-full h-full object-cover"
           style={{ filter: "brightness(1.1)" }}
-          preload="auto"
+          preload="metadata"
           onError={() => console.error("Video failed to load")}
         >
           <source src="/video/video.mp4" type="video/mp4" />

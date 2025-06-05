@@ -19,7 +19,7 @@ const Panel = () => {
   const [selectedDetailItemId, setSelectedDetailItemId] = useState(null);
   const [chat, setChat] = useState("");
   const [sending, setSending] = useState(false);
-  const [owner, setOwner] = useState();
+  const [owner, setOwner] = useState([]);
 
   const handlePersonalData = () => {
     setShowData((prev) => !prev);
@@ -125,7 +125,7 @@ const Panel = () => {
             throw new Error("Failed to fetch items");
           }
           const ownersDetails = await ownersRes.json();
-          setOwner(ownersDetails);
+          setOwner(Array.isArray(ownersDetails) ? ownersDetails : []);
           console.log("owners", ownersDetails);
         } catch (error) {
           toast.error(error.message);
@@ -437,7 +437,9 @@ const Panel = () => {
                       </h3>
                       <p className="text-gray-400 text-xs sm:text-sm">
                         Ad owner:{" "}
-                        {owner.find((o) => o._id === item.userId)?.firstName ||
+                        {(owner?.length &&
+                          owner.find((o) => o._id === item.userId)
+                            ?.firstName) ||
                           "anonymous"}
                       </p>
                     </div>
@@ -645,7 +647,7 @@ const Panel = () => {
                     </div>
                   ))}
                 </div>
-                {selectedDetailItemId && (
+                {selectedDetailItemId && items?.length && (
                   <MyItemInPanel
                     showDetails={showDetails}
                     setShowDetails={setShowDetails}
