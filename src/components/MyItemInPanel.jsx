@@ -12,7 +12,7 @@ const formatDate = (dateString) => {
 
 const MyItemInPanel = ({ showDetails, setShowDetails, item }) => {
   if (!showDetails) return null;
-
+  if (!item) return null;
   return (
     <>
       <div className="fixed inset-0 bg-black/50 z-10" />
