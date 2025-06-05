@@ -57,7 +57,7 @@ const ItemMap = () => {
       ); // Distance in m
       matchesDistance = distance <= parseInt(selectedRadius);
     }
-
+    
     return matchesCategory && matchesSearch && matchesDistance;
   });
 
@@ -118,7 +118,16 @@ const ItemMap = () => {
         />
 
         {/* category filter */}
-        <CategorySelect className="category-div" value={selectedCategory} onChange={setSelectedCategory} />
+        <CategorySelect 
+        className="category-div" 
+        value={selectedCategory} 
+        onChange={(e) => {
+          const value = e.target.value; // Extract the value from the event
+          console.log("Selected category:", value);
+          setSelectedCategory(value);
+        }}
+        
+         />
 
         {/* radius */}
         <select
