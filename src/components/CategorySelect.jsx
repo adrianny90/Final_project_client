@@ -1,5 +1,5 @@
-const CategorySelect = ({ value, onChange }) => (
-  <div className="mb-6">
+const CategorySelect = ({ value, onChange,className=''}) => (
+  <div className={`mb-6 ${className}`}>
     <label htmlFor="category" className="block text-black">
       Category
     </label>

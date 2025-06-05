@@ -118,7 +118,7 @@ const ItemMap = () => {
         />
 
         {/* category filter */}
-        <CategorySelect value={selectedCategory} onChange={setSelectedCategory} />
+        <CategorySelect className="category-div" value={selectedCategory} onChange={setSelectedCategory} />
 
         {/* radius */}
         <select
