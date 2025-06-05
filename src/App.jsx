@@ -12,6 +12,7 @@ import ItemMap from "./pages/ItemMap.jsx";
 import ItemDetails from "./pages/ItemDetailsPage.jsx";
 import { AuthContextProvider } from "./context/AuthContextProvider.jsx";
 import Panel from "./pages/Panel.jsx";
+import Terms from "./pages/Terms.jsx";
 
 function App() {
   return (
@@ -33,9 +34,11 @@ function App() {
             <Route path="/give" element={<AddPost />} />
             <Route path="/panel" element={<Panel />} />
           </Route>
+
           <Route path="/get" element={<GetFreePage />} />
           <Route path="/map" element={<ItemMap />} />
           <Route path="get/items/:id" element={<ItemDetails />} />
+          <Route path="/terms" element={<Terms />} />
           <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>
