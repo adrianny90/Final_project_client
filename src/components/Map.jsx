@@ -30,18 +30,16 @@ const HighlightIcon = L.icon({
 });
 
 
-const Map = ({ items = [], center, selectedItem, onItemSelect, radius, onCenterChange, onMapClick,address }) => {
+const Map = ({ items = [], center, selectedItem, onItemSelect, radius, onCenterChange, onMapClick }) => {
   const [map, setMap] = useState(null);
-  const [currentCenter, setCurrentCenter] = useState(center || [52.5200, 13.4050]);
+  // const [currentCenter, setCurrentCenter] = useState(center || [52.5200, 13.4050]);
 
 
 
   useEffect(() => {
     if (map && center) {
-      const newCenter = Array.isArray(center) ? center : [center.lat, center.lng];
-      setCurrentCenter(newCenter);
-      map.flyTo(newCenter, 15,{
-        duration:1 
+      map.flyTo(center, 15, {
+        duration: 1,
       });
     }
   }, [map, center]);
@@ -55,10 +53,9 @@ const Map = ({ items = [], center, selectedItem, onItemSelect, radius, onCenterC
         description: "Dies ist der Standard-Marker",
         location: { coordinates: [13.4050, 52.5200] },
       }];
-
+      //Center for distance
   const handleDrag = (e) => {
     const newCenter = e.target.getLatLng();
-    setCurrentCenter([newCenter.lat, newCenter.lng]);
     if (onCenterChange) {
       onCenterChange([newCenter.lat, newCenter.lng]);
     }
@@ -67,7 +64,7 @@ const Map = ({ items = [], center, selectedItem, onItemSelect, radius, onCenterC
   return (
     <MapContainer
       className="map-container"
-      center={currentCenter}
+      center={center}
       zoom={13}
       scrollWheelZoom={false}
       whenCreated={setMap}
@@ -86,12 +83,12 @@ const Map = ({ items = [], center, selectedItem, onItemSelect, radius, onCenterC
       {radius && (
         <>
           <Circle
-            center={currentCenter}
+            center={center}
             radius={parseInt(radius)}
             pathOptions={{ color: "blue", fillColor: "#a3cfff", fillOpacity: 0.3 }}
           />
           <Marker
-            position={currentCenter}
+            position={center}
             draggable={true}
             eventHandlers={{ dragend: handleDrag }}
             icon={circleIcon}
