@@ -7,6 +7,7 @@ import { AuthContext } from "../context/AuthContextProvider";
 import { useContext } from "react";
 import { OpenStreetMapProvider } from 'leaflet-geosearch';
 import haversine from 'haversine-distance';
+import ItemCard from "../components/ItemCard";
 
 const ItemMap = () => {
   const { user } = useContext(AuthContext);
@@ -17,22 +18,30 @@ const ItemMap = () => {
     postalCode: "",
     city: "",
   });
-
+  //State for actual mapposition
   const [position, setPosition] = useState([52.5200, 13.4050]); // Berlin Center
+  //filter states
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedRadius, setSelectedRadius] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
+  //item states
   const [items, setItems] = useState([]);
   const [selectedItem, setSelectedItem] = useState(null);
-  const [loading, setLoading] = useState(false);
 
-  // fetching all item once
+  const [loading, setLoading] = useState(false);
+  //OSM Provider for Geocoding
+  const osmProvider = new OpenStreetMapProvider({
+    params: { countrycodes: 'de', addressdetails: 1 },
+  });
+
+  // fetching all items in first mount
   useEffect(() => {
     const fetchItems = async () => {
       setLoading(true);
       try {
         const res = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/items`);
         setItems(res.data);
+        console.log(res.data)
       } catch (err) {
         console.error("Error fetching items:", err);
       } finally {
@@ -71,13 +80,10 @@ const ItemMap = () => {
     }
   };
 
-  const osmProvider = new OpenStreetMapProvider({
-    params: { countrycodes: 'de', addressdetails: 1 },
-  });
 
   const handleAddressSearch = async () => {
     if (!address.street || !address.postalCode || !address.city) {
-      alert("Bitte Straße, PLZ und Stadt eingeben.");
+      alert("Street, postal code and city are required");
       return;
     }
 
@@ -90,11 +96,11 @@ const ItemMap = () => {
         const { x: lon, y: lat } = results[0];
         setPosition([lat, lon]);
       } else {
-        alert("Adresse nicht gefunden.");
+        alert("Address not found");
       }
     } catch (error) {
-      console.error("Fehler bei der Adresssuche:", error);
-      alert("Fehler bei der Adresseingabe.");
+      console.error("Error finding the address", error);
+      alert("Error while address input");
     } finally {
       setLoading(false);
     }
@@ -104,6 +110,7 @@ const ItemMap = () => {
     const { name, value } = e.target;
     setAddress((prev) => ({ ...prev, [name]: value }));
   };
+
 
   return (
     <div className="mapPage-Container">
@@ -121,11 +128,8 @@ const ItemMap = () => {
         <CategorySelect 
         className="category-div" 
         value={selectedCategory} 
-        onChange={(e) => {
-          const value = e.target.value; // Extract the value from the event
-          console.log("Selected category:", value);
-          setSelectedCategory(value);
-        }}
+        onChange={(e) => setSelectedCategory(e.target.value)}
+
         
          />
 
@@ -168,7 +172,7 @@ const ItemMap = () => {
           radius={parseInt(selectedRadius)} // circle
           address={address}
           onCenterChange={setPosition}
-          // onMapClick={handleClickOnMap}
+      
         />
       </div>
     </div>

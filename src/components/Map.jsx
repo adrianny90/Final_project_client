@@ -50,7 +50,7 @@ const Map = ({ items = [], center, selectedItem, onItemSelect, radius, onCenterC
         id: "default-marker",
         name: "Berlin",
         title: "Willkommen in Berlin!",
-        description: "Dies ist der Standard-Marker",
+        description: "drag and drop to get a new address",
         location: { coordinates: [13.4050, 52.5200] },
       }];
       //Center for distance
@@ -80,7 +80,7 @@ const Map = ({ items = [], center, selectedItem, onItemSelect, radius, onCenterC
         attribution='© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-      {radius && (
+      {radius && center &&(
         <>
           <Circle
             center={center}
@@ -97,7 +97,7 @@ const Map = ({ items = [], center, selectedItem, onItemSelect, radius, onCenterC
           </Marker>
         </>
       )}
-      {displayItems.map((item, index) => {
+      {displayItems.map((item) => {
         const coords = item?.address?.location?.coordinates || item?.location?.coordinates;
         const position = Array.isArray(coords) && coords.length === 2
           ? [coords[1], coords[0]]
@@ -109,7 +109,7 @@ const Map = ({ items = [], center, selectedItem, onItemSelect, radius, onCenterC
 
         return (
           <Marker
-            key={item._id || `default-${index}`}
+            key={item._id || `${item.title}-${item.description}-${item.location?.coordinates[0]}-${item.location?.coordinates[1]}`}
             position={position}
             icon={isSelected ? HighlightIcon : DefaultIcon}
             eventHandlers={{
@@ -117,7 +117,12 @@ const Map = ({ items = [], center, selectedItem, onItemSelect, radius, onCenterC
             }}
           >
             <Popup>
-              <ItemCard item={item} />
+            {!isDefaultMarker ? <ItemCard item={item} /> : (
+                <div>
+                  <h3>{item.title}</h3>
+                  <p>{item.description}</p>
+                </div>
+              )}
             </Popup>
           </Marker>
         );
