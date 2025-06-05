@@ -14,7 +14,11 @@ const DefaultIcon = L.icon({
   popupAnchor: [1, -34],
   shadowSize: [41, 41],
 });
-
+const circleIcon = L.divIcon({
+  iconSize: [20, 20],       
+  iconAnchor: [10, 10],      
+  className: "center-circle-marker",
+});
 const HighlightIcon = L.icon({
   iconUrl: markerIcon,
   shadowUrl: markerShadow,
@@ -24,6 +28,7 @@ const HighlightIcon = L.icon({
   shadowSize: [51, 51],
   className: "highlight-marker",
 });
+
 
 const Map = ({ items = [], center, selectedItem, onItemSelect, radius, onCenterChange, onMapClick,address }) => {
   const [map, setMap] = useState(null);
@@ -89,7 +94,7 @@ const Map = ({ items = [], center, selectedItem, onItemSelect, radius, onCenterC
             position={currentCenter}
             draggable={true}
             eventHandlers={{ dragend: handleDrag }}
-            icon={DefaultIcon}
+            icon={circleIcon}
           >
             <Popup>Drag & Drop or set address</Popup>
           </Marker>

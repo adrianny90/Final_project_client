@@ -5,7 +5,8 @@ import Spinner from "../components/Spinner";
 import axios from "axios";
 import { AuthContext } from "../context/AuthContextProvider";
 import { useContext } from "react";
-import {OpenStreetMapProvider} from 'leaflet-geosearch'
+import { OpenStreetMapProvider } from 'leaflet-geosearch';
+import haversine from 'haversine-distance'; // NEU
 
 const ItemMap = () => {
   const { user } = useContext(AuthContext);
@@ -16,7 +17,8 @@ const ItemMap = () => {
     postalCode: "",
     city: "",
   });
-  const [position, setPosition] = useState([52.5200, 13.4050]);
+
+  const [position, setPosition] = useState([52.5200, 13.4050]); // Berlin Center
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedRadius, setSelectedRadius] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
@@ -24,35 +26,12 @@ const ItemMap = () => {
   const [selectedItem, setSelectedItem] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  // Handle map clicks to update position
-  const handleClickOnMap = (latLng) => {
-    setPosition([latLng.lat, latLng.lng]);
-  };
-
-  // Handle marker drag to update position
-  const handleCenterChange = (newCenter) => {
-    setPosition(newCenter);
-  };
-
+  // fetching all item once
   useEffect(() => {
     const fetchItems = async () => {
       setLoading(true);
-
       try {
-        const params = new URLSearchParams();
-
-        if (selectedCategory) params.append("category", selectedCategory);
-        if (searchQuery) params.append("search", searchQuery);
-
-        if (selectedRadius) {
-          params.append("lat", position[0]); // lat
-          params.append("lng", position[1]); // lng
-          params.append("radius", selectedRadius); // Meter
-        }
-
-        const res = await axios.get(
-          `${import.meta.env.VITE_API_BASE_URL}/items?${params.toString()}`
-        );
+        const res = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/items`);
         setItems(res.data);
       } catch (err) {
         console.error("Error fetching items:", err);
@@ -62,11 +41,28 @@ const ItemMap = () => {
     };
 
     fetchItems();
-  }, [selectedCategory, selectedRadius, searchQuery, position]);
+  }, []);
+
+  // All the filtering in the frontend
+  const filteredItems = items.filter(item => {
+    const matchesCategory = selectedCategory ? item.category === selectedCategory : true;
+    const matchesSearch = searchQuery ? item.title?.toLowerCase().includes(searchQuery.toLowerCase()) : true;
+
+    let matchesDistance = true;
+    if (selectedRadius && item.address?.location?.coordinates) {
+      const [lng, lat] = item.address.location.coordinates;
+      const distance = haversine(
+        { lat: position[0], lng: position[1] },
+        { lat, lng }
+      ); // Distance in m
+      matchesDistance = distance <= parseInt(selectedRadius);
+    }
+
+    return matchesCategory && matchesSearch && matchesDistance;
+  });
 
   const handleItemSelect = (item) => {
     setSelectedItem(item);
-
     if (item?.address?.location?.coordinates) {
       setPosition([
         item.address.location.coordinates[1], // lat
@@ -76,15 +72,12 @@ const ItemMap = () => {
   };
 
   const osmProvider = new OpenStreetMapProvider({
-    params: {
-      countrycodes: 'de',
-      addressdetails: 1,
-    },
+    params: { countrycodes: 'de', addressdetails: 1 },
   });
 
   const handleAddressSearch = async () => {
     if (!address.street || !address.postalCode || !address.city) {
-      alert("Please fill in street, postal code, and city.");
+      alert("Bitte Straße, PLZ und Stadt eingeben.");
       return;
     }
 
@@ -94,16 +87,14 @@ const ItemMap = () => {
       const results = await osmProvider.search({ query });
 
       if (results.length > 0) {
-        // result is  [lon, lat]
         const { x: lon, y: lat } = results[0];
-        console.log(results)
-        setPosition([lat, lon]); // converting [lat, lng]
+        setPosition([lat, lon]);
       } else {
-        alert("Address not found. Please check your input.");
+        alert("Adresse nicht gefunden.");
       }
     } catch (error) {
-      console.error("Searching address failed:", error);
-      alert("Error searching address. Please try again.");
+      console.error("Fehler bei der Adresssuche:", error);
+      alert("Fehler bei der Adresseingabe.");
     } finally {
       setLoading(false);
     }
@@ -117,7 +108,7 @@ const ItemMap = () => {
   return (
     <div className="mapPage-Container">
       <fieldset className="fieldset-map">
-        {/* Search by item */}
+        {/* search for item field */}
         <input
           className="category-div mb-5 mt-5"
           type="text"
@@ -126,10 +117,10 @@ const ItemMap = () => {
           onChange={(e) => setSearchQuery(e.target.value)}
         />
 
-        {/* Category */}
-        <CategorySelect value={selectedCategory} onChange={setSelectedCategory} />
+        {/* category filter */}
+        <CategorySelect className="category-div" value={selectedCategory} onChange={setSelectedCategory} />
 
-        {/* Radius Dropdown */}
+        {/* radius */}
         <select
           value={selectedRadius}
           onChange={(e) => setSelectedRadius(e.target.value)}
@@ -145,63 +136,30 @@ const ItemMap = () => {
           <option value="15000">15 km</option>
         </select>
 
-        {/* Structured Address Input */}
+        {/* address */}
         <div className="category-div mt-5 address-inputs">
-          <input
-            type="text"
-            name="street"
-            placeholder="Street"
-            value={address.street}
-            onChange={handleAddressChange}
-            className="address-field"
-          />
-          <input
-            type="text"
-            name="number"
-            placeholder="Number"
-            value={address.number}
-            onChange={handleAddressChange}
-            className="address-field small"
-          />
-          <input
-            type="text"
-            name="postalCode"
-            placeholder="Postal Code"
-            value={address.postalCode}
-            onChange={handleAddressChange}
-            className="address-field medium"
-          />
-          <input
-            type="text"
-            name="city"
-            placeholder="City"
-            value={address.city}
-            onChange={handleAddressChange}
-            className="address-field"
-          />
-          <button
-            className="search-btn"
-            onClick={handleAddressSearch}
-            disabled={loading}
-          > Search
-          </button>
+          <input type="text" name="street" placeholder="Street" value={address.street} onChange={handleAddressChange} className="address-field" />
+          <input type="text" name="number" placeholder="Number" value={address.number} onChange={handleAddressChange} className="address-field small" />
+          <input type="text" name="postalCode" placeholder="Postal Code" value={address.postalCode} onChange={handleAddressChange} className="address-field medium" />
+          <input type="text" name="city" placeholder="City" value={address.city} onChange={handleAddressChange} className="address-field" />
+          <button className="search-btn" onClick={handleAddressSearch} disabled={loading}>Search</button>
         </div>
 
         {loading && <Spinner />}
       </fieldset>
 
-      {/* Map */}
+      {/* MAP */}
       <div className="map1">
         <Map
-          key={`${position[0]}-${position[1]}-${selectedRadius}`}
-          items={items}
+          // key={`${position[0]}-${position[1]}-${selectedRadius}`}
+          items={filteredItems} //
           center={position}
           selectedItem={selectedItem}
           onItemSelect={handleItemSelect}
-          radius={parseInt(selectedRadius)}
+          radius={parseInt(selectedRadius)} // circle
           address={address}
-          onMapClick={handleClickOnMap}
-          onCenterChange={handleCenterChange}
+          onCenterChange={setPosition}
+          // onMapClick={handleClickOnMap}
         />
       </div>
     </div>
