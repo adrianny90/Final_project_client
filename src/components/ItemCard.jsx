@@ -11,6 +11,7 @@ const formatDate = (dateString) => {
 };
 
 const ItemCard = ({ item }) => {
+  if(!item) return null;
   const PostTypeIcon = item.postType === "Offer" ? Gift : FilePen;
 
   return (
