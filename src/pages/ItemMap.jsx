@@ -6,7 +6,7 @@ import axios from "axios";
 import { AuthContext } from "../context/AuthContextProvider";
 import { useContext } from "react";
 import { OpenStreetMapProvider } from 'leaflet-geosearch';
-import haversine from 'haversine-distance'; // NEU
+import haversine from 'haversine-distance';
 
 const ItemMap = () => {
   const { user } = useContext(AuthContext);
