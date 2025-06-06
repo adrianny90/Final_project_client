@@ -103,10 +103,10 @@ const ItemDetails = () => {
 
   return (
     <div className="max-w-3xl mx-auto p-2 bg-gray-200 rounded-xl overflow-hidden">
-      <div className="relative w-full h-72">
+      <div className="relative w-full h-56 sm:h-72 bg-gray-300 rounded-lg">
         <img
           src={item?.photos?.[currentImage] || "/image/item.jpg"}
-          className="w-full h-72 object-cover rounded-md"
+          className="w-full h-full object-contain"
         />
         {item.photos.length > 1 && (
           <>
@@ -133,26 +133,26 @@ const ItemDetails = () => {
 
       <h1 className="text-black text-xl font-bold mt-4 px-4">{item.title}</h1>
 
-      <div className="flex items-center text-md text-gray-700 gap-2 mt-2  px-4">
-        <MapPin className="w-5 h-5 text-gray-700" />
+      <div className="flex flex-wrap items-center text-md text-gray-700 gap-2 mt-2 px-4 gap-x-2 gap-y-1">
+        <MapPin className="w-5 h-5" />
         <span>
           {item.address?.street || ""} {item.address?.houseStreet || ""},{" "}
           {item.address?.postalCode || ""} {item.address?.city || ""}
         </span>
       </div>
 
-      <div className="flex items-center text-md text-gray-700 gap-2 mt-1  px-4">
-        <Calendar className="w-5 h-5 text-gray-700" />
+      <div className="flex flex-wrap items-center text-md text-gray-700 gap-2 mt-2 px-4 gap-x-2 gap-y-1">
+        <Calendar className="w-5 h-5" />
         <span>Posted on: {formatDate(item.createdAt)}</span>
       </div>
 
-      <div className="flex items-center text-md text-gray-700 gap-2 mt-1  px-4">
-        <PostTypeIcon className="w-5 h-5 text-gray-700" />
+      <div className="flex flex-wrap items-center text-md text-gray-700 gap-2 mt-2 px-4 gap-x-2 gap-y-1">
+        <PostTypeIcon className="w-5 h-5" />
         <span>Post type: {item.postType}</span>
       </div>
 
-      <div className="flex items-center text-md text-gray-700 gap-2 mt-1  px-4">
-        <Clock className="w-5 h-5 text-gray-700" />
+      <div className="flex flex-wrap items-center text-md text-gray-700 gap-2 mt-2 px-4 gap-x-2 gap-y-1">
+        <Clock className="w-5 h-5" />
         <span>Collection Time: {formatDateTime(item.collectionTime)}</span>
       </div>
 
@@ -165,7 +165,7 @@ const ItemDetails = () => {
         <span className="block font-bold text-lg mb-1">Write message</span>
         <textarea
           name="message"
-          placeholder="Write here..."
+          placeholder="Write message here..."
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           disabled={sending}
@@ -181,7 +181,7 @@ const ItemDetails = () => {
           Send message
         </button>
       </div>
-      <div className="map">
+      <div className="map mt-4">
         <Map
           center={
             item?.address?.location?.coordinates && [
@@ -196,7 +196,7 @@ const ItemDetails = () => {
 
       <Link
         to="/get"
-        className="inline-block mt-2 text-black hover:underline px-4"
+        className="inline-block mt-2 text-blue-600 hover:underline px-4"
       >
         ← Back
       </Link>
