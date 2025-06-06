@@ -24,16 +24,14 @@ const Login = () => {
       const data = await signIn({ email, password });
       console.log(data, "data");
 
-      if (
-        data.message === "Invalid body" ||
-        data.message === "Something went wrong"
-      ) {
-        toast.error("Login failed, check your credentials! 😕", {
-          ariaLabel: "Login error",
-        });
-      } else {
+      if (data.message === "Successfully logged in") {
         toast.success("Welcome back, you’re in! 😎", {
           ariaLabel: "Login success",
+        });
+      } else {
+        console.log(data, "data");
+        toast.error("Login failed, check your credentials! 😕", {
+          ariaLabel: "Login error",
         });
       }
 

@@ -404,7 +404,7 @@ const Panel = () => {
                 name="firstName"
                 value={user.firstName || ""}
                 onChange={handleChange}
-                className="mt-1 w-full p-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm sm:text-base"
+                className="mt-1 w-full p-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-sm sm:text-base"
                 placeholder="Enter first name"
               />
             </label>
@@ -416,7 +416,7 @@ const Panel = () => {
                 name="lastName"
                 value={user.lastName || ""}
                 onChange={handleChange}
-                className="mt-1 w-full p-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm sm:text-base"
+                className="mt-1 w-full p-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-sm sm:text-base"
                 placeholder="Enter last name"
               />
             </label>
@@ -426,7 +426,7 @@ const Panel = () => {
                 name="email"
                 value={user.email || ""}
                 onChange={handleChange}
-                className="mt-1 w-full p-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm sm:text-base"
+                className="mt-1 w-full p-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-sm sm:text-base"
                 placeholder="Enter email"
               />
             </label>
@@ -438,7 +438,7 @@ const Panel = () => {
                 name="address.street"
                 value={user.address?.street || ""}
                 onChange={handleChange}
-                className="mt-1 w-full p-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm sm:text-base"
+                className="mt-1 w-full p-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-sm sm:text-base"
                 placeholder="Enter street"
               />
             </label>
@@ -450,7 +450,7 @@ const Panel = () => {
                 name="address.houseStreet"
                 value={user.address?.houseStreet || ""}
                 onChange={handleChange}
-                className="mt-1 w-full p-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm sm:text-base"
+                className="mt-1 w-full p-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-sm sm:text-base"
                 placeholder="Enter house number"
               />
             </label>
@@ -462,7 +462,7 @@ const Panel = () => {
                 name="address.postalCode"
                 value={user.address?.postalCode || ""}
                 onChange={handleChange}
-                className="mt-1 w-full p-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm sm:text-base"
+                className="mt-1 w-full p-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-sm sm:text-base"
                 placeholder="Enter postal code"
               />
             </label>
@@ -472,7 +472,7 @@ const Panel = () => {
                 name="address.city"
                 value={user.address?.city || ""}
                 onChange={handleChange}
-                className="mt-1 w-full p-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm sm:text-base"
+                className="mt-1 w-full p-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-sm sm:text-base"
                 placeholder="Enter city"
               />
             </label>
@@ -490,7 +490,7 @@ const Panel = () => {
             </label>
             <button
               type="submit"
-              className="w-full py-2 px-4 bg-blue-700 text-white rounded-lg hover:bg-blue-600 transition-all duration-200 text-sm sm:text-base"
+              className="w-full py-2 px-4 bg-gray-600 hover:bg-green-500 text-white rounded-lg  transition-all duration-200 text-sm sm:text-base"
             >
               Submit Changes
             </button>
@@ -517,7 +517,7 @@ const Panel = () => {
                       onClick={() => setSelectedItemId(item)}
                       className={`p-4 bg-gray-700 rounded-lg shadow-md hover:bg-gray-600 cursor-pointer transition-colors duration-200 flex flex-col items-center ${
                         selectedItemId?._id === item._id
-                          ? "ring-2 ring-blue-500"
+                          ? "ring-2 ring-green-500"
                           : ""
                       }`}
                     >
@@ -559,7 +559,7 @@ const Panel = () => {
                             onClick={() => setSelectedRecipientId(recipient.id)}
                             className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-semibold text-sm transition-colors duration-200 ${
                               selectedRecipientId === recipient.id
-                                ? "bg-blue-600 ring-2 ring-blue-400"
+                                ? "bg-gray-900 ring-2 ring-green-500"
                                 : "bg-gray-600 hover:bg-gray-500"
                             }`}
                             title={recipient.firstName}
@@ -601,8 +601,8 @@ const Panel = () => {
                           <div
                             className={`max-w-[80%] sm:max-w-xs p-3 rounded-lg ${
                               message.senderId === user._id
-                                ? "bg-blue-600 text-white"
-                                : "bg-gray-600 text-white"
+                                ? "bg-gray-500 text-white"
+                                : "bg-gray-900 text-white"
                             }`}
                           >
                             <div className="flex items-center mb-1">
@@ -659,12 +659,12 @@ const Panel = () => {
                       onChange={(e) => setChat(e.target.value)}
                       disabled={sending}
                       required
-                      className="flex-1 p-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm sm:text-base"
+                      className="flex-1 p-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-sm sm:text-base"
                     />
                     <button
                       type="submit"
                       disabled={sending || !selectedRecipientId}
-                      className="px-3 sm:px-4 py-2 bg-blue-700 text-white rounded-lg hover:bg-blue-600 transition-all duration-200 text-sm sm:text-base"
+                      className="px-3 sm:px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-green-500 transition-all duration-200 text-sm sm:text-base"
                     >
                       Send
                     </button>
@@ -677,7 +677,8 @@ const Panel = () => {
               )}
             </div>
           </div>
-        ) : showItems ? (
+        ) : //??????????????????????      ITEMS     ???????????????????
+        showItems ? (
           <div className="w-full max-w-2xl mx-auto bg-gray-800 p-4 sm:p-6 rounded-lg shadow-lg">
             <h2 className="text-xl sm:text-2xl text-white font-semibold mb-4 sm:mb-6">
               My Items
@@ -698,7 +699,7 @@ const Panel = () => {
                       key={item._id}
                       className="w-full p-4 sm:p-6 bg-gray-700 rounded-xl shadow-lg hover:bg-gray-600 transition-colors duration-200"
                     >
-                      <div className="w-full h-32 sm:h-40 bg-gray-600 rounded-lg flex items-center justify-center overflow-hidden">
+                      <div className="w-full h-32 sm:h-40 bg-gray-500 rounded-lg flex items-center justify-center overflow-hidden">
                         <img
                           src={
                             item.photos?.[0] ||
@@ -758,7 +759,7 @@ const Panel = () => {
                             setSelectedDetailItemId(item._id);
                             setShowDetails(true);
                           }}
-                          className="px-4 sm:px-6 py-2 bg-gray-600 text-white font-semibold rounded-full hover:bg-green-500 hover:text-gray-900 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-green-400"
+                          className="px-4 sm:px-6 py-2 bg-gray-800 text-white font-semibold rounded-full hover:bg-green-500 hover:text-gray-900 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-green-400"
                         >
                           View Details
                         </button>
