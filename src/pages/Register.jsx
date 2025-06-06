@@ -25,18 +25,21 @@ const Register = () => {
       e.preventDefault();
 
       if (!firstName || !lastName || !email || !password || !confirmPassword)
-        throw new Error("All fields are required");
+        throw new Error("All fields are required.");
       if (password !== confirmPassword)
-        throw new Error("Passwords do not match");
+        throw new Error("Passwords do not match.");
+      console.log(password.length, "dlugosc");
+      if (password.length < 4)
+        throw new Error("Password must contain minimum 4 characters.");
 
       setLoading(true);
       const res = await signUp({ firstName, lastName, email, password });
-      if (res.message === "User with such email already exists") {
+      if (res.message === "User with such email already exists.") {
         toast.error("User with such email already exists! 😕", {
           ariaLabel: "Login error",
         });
       } else {
-        toast.success("Welcome on board, you’re in! 😎", {
+        toast.success("You are almost with us, please verify your email! 😎", {
           ariaLabel: "Registration successful",
         });
         navigate("/login");
