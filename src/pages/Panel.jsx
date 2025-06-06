@@ -63,9 +63,13 @@ const Panel = () => {
         throw new Error("At least name and email are required");
       }
       const data = await updateUser(user);
-      toast.success("Submitted");
+      toast.info("Changes are made! 👋", {
+        ariaLabel: "Submitted",
+      });
     } catch (error) {
-      toast.error(error.message);
+      toast.error("Something went wrong, try again later. 😕", {
+        ariaLabel: "Submit error",
+      });
     }
   };
 
@@ -322,7 +326,7 @@ const Panel = () => {
       "Are you sure you want to delete this item?"
     );
     if (!confirmed) return;
-    console.log(itemId, "here is item ID");
+    // console.log(itemId, "here is item ID");
 
     try {
       const response = await axios.delete(
@@ -334,7 +338,9 @@ const Panel = () => {
         setItems((prevItems) =>
           prevItems.filter((item) => item._id !== itemId)
         );
-        toast.success("Item deleted successfully!");
+        toast.info("Item deleted successfully! 👋", {
+          ariaLabel: "Delete confirmation",
+        });
 
         if (selectedItemId?._id === itemId) {
           setSelectedItemId(null);

@@ -31,8 +31,10 @@ const AuthContextProvider = ({ children, fetchUser = true }) => {
     try {
       await signOut(); //Cookie will be deleted
       setUser(null); //User data will be deleted
-      toast.success("Logout succeeded");
-      setTimeout(() => navigate("/"), 3000);
+      toast.info("Logged out—see you soon! 👋", {
+        ariaLabel: "Logout confirmation",
+      });
+      setTimeout(() => navigate("/"), 1500);
     } catch (error) {
       console.log(error);
     }
