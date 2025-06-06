@@ -30,11 +30,17 @@ const Register = () => {
         throw new Error("Passwords do not match");
 
       setLoading(true);
-      await signUp({ firstName, lastName, email, password });
-      toast.success(
-        "Registration successful. Please check email and verify user!"
-      );
-      navigate("/login");
+      const res = await signUp({ firstName, lastName, email, password });
+      if (res.message === "User with such email already exists") {
+        toast.error("User with such email already exists! 😕", {
+          ariaLabel: "Login error",
+        });
+      } else {
+        toast.success("Welcome on board, you’re in! 😎", {
+          ariaLabel: "Registration successful",
+        });
+        navigate("/login");
+      }
     } catch (error) {
       toast.error(error.message);
     } finally {

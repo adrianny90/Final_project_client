@@ -22,9 +22,23 @@ const Login = () => {
       if (!email || !password) throw new Error("All fields are required");
       setLoading(true);
       const data = await signIn({ email, password });
-      console.log(data);
+      console.log(data, "data");
+
+      if (
+        data.message === "Invalid body" ||
+        data.message === "Something went wrong"
+      ) {
+        toast.error("Login failed, check your credentials! 😕", {
+          ariaLabel: "Login error",
+        });
+      } else {
+        toast.success("Welcome back, you’re in! 😎", {
+          ariaLabel: "Login success",
+        });
+      }
+
       setUser(data.userResponse);
-      toast.success(data.message);
+
       if (user?.userResponse) navigate("/");
     } catch (error) {
       toast.error(error.message);
