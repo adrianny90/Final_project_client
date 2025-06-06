@@ -20,6 +20,8 @@ const ItemMap = () => {
   });
   //State for actual mapposition
   const [position, setPosition] = useState([52.5200, 13.4050]); // Berlin Center
+  //state for the distance circle
+  const [circleCenter, setCircleCenter] = useState([52.5200, 13.4050]) // initial state at Center
   //filter states
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedRadius, setSelectedRadius] = useState("");
@@ -61,7 +63,7 @@ const ItemMap = () => {
     if (selectedRadius && item.address?.location?.coordinates) {
       const [lng, lat] = item.address.location.coordinates;
       const distance = haversine(
-        { lat: position[0], lng: position[1] },
+        { lat: circleCenter[0], lng: circleCenter[1] },
         { lat, lng }
       ); // Distance in m
       matchesDistance = distance <= parseInt(selectedRadius);
@@ -71,6 +73,7 @@ const ItemMap = () => {
   });
 
   const handleItemSelect = (item) => {
+    if (item._id === "default-marker") return;
     setSelectedItem(item);
     if (item?.address?.location?.coordinates) {
       setPosition([
@@ -95,6 +98,7 @@ const ItemMap = () => {
       if (results.length > 0) {
         const { x: lon, y: lat } = results[0];
         setPosition([lat, lon]);
+        setCircleCenter([lat, lon]);
       } else {
         alert("Address not found");
       }
@@ -110,7 +114,13 @@ const ItemMap = () => {
     const { name, value } = e.target;
     setAddress((prev) => ({ ...prev, [name]: value }));
   };
-
+  // const handleCenterChange = (newCenter) => {
+  //   setCircleCenter(newCenter); // Update circle center on drag
+  //   setPosition(newCenter); // Optionally sync map center
+  // };
+const handleCircleCenterChange = (newCenter) => {
+  setCircleCenter(newCenter);
+};
 
   return (
     <div className="mapPage-Container">
@@ -155,7 +165,7 @@ const ItemMap = () => {
           <input type="text" name="number" placeholder="Number" value={address.number} onChange={handleAddressChange} className="address-field small" />
           <input type="text" name="postalCode" placeholder="Postal Code" value={address.postalCode} onChange={handleAddressChange} className="address-field medium" />
           <input type="text" name="city" placeholder="City" value={address.city} onChange={handleAddressChange} className="address-field" />
-          <button className="search-btn" onClick={handleAddressSearch} disabled={loading}>Search</button>
+          <button className="search-btn" onClick={handleAddressSearch} disabled={loading?true:false}>Search</button>
         </div>
 
         {loading && <Spinner />}
@@ -165,8 +175,10 @@ const ItemMap = () => {
       <div className="map1">
         <Map
         
-          items={filteredItems} //
+          items={filteredItems} 
           center={position}
+          circleCenter={circleCenter}
+          onCircleCenterChange={handleCircleCenterChange}
           selectedItem={selectedItem}
           onItemSelect={handleItemSelect}
           radius={parseInt(selectedRadius)} // circle
@@ -178,5 +190,6 @@ const ItemMap = () => {
     </div>
   );
 };
+
 
 export default ItemMap;
