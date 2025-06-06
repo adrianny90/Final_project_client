@@ -1,22 +1,19 @@
 const CategorySidebar = ({ selectedCategories, onCategoryChange }) => {
   const categories = [
-    "Accessories",
-    "Baby and Toys",
-    "Bathroom Essentials",
-    "Bedding and Linens",
     "Books",
-    "Clothing",
-    "Decorations",
+    "Baby and Toys",
+    "Beauty and Personal Care",
+    "Clothing and Accessories",
     "Electronics",
-    "Fitness and Sports",
     "Furniture",
-    "Kitchen and Dining",
-    "Gardening Supplies",
+    "Garden Accessories and Plants",
+    "Household Appliances and Goods",
+    "Kitchen Appliances and Accessories",
     "Hobby",
-    "Pets",
+    "Sports and Outdoors",
+    "Pet Supplies",
     "Services",
     "Others",
-    "Requested Items",
   ];
 
   const toggleCategory = (category) => {
@@ -28,7 +25,7 @@ const CategorySidebar = ({ selectedCategories, onCategoryChange }) => {
   };
 
   return (
-    <div className="bg-white rounded-2xl text-black m-4 p-4 w-60">
+    <div className="bg-white rounded-2xl text-black m-4 w-61">
       <h2 className="font-semibold text-lg mb-4">Categories</h2>
       <div className="flex flex-col space-y-2">
         {categories.map((cat, idx) => (
@@ -38,8 +35,8 @@ const CategorySidebar = ({ selectedCategories, onCategoryChange }) => {
             className={`text-sm px-3 py-1 rounded-full text-left transition-colors
               ${
                 selectedCategories.includes(cat)
-                  ? "bg-green-500 text-black"
-                  : "bg-gray-200 text-black hover:bg-green-500"
+                  ? "bg-blue-500 text-white"
+                  : "bg-gray-200 text-black hover:bg-blue-600"
               }`}
           >
             {cat}

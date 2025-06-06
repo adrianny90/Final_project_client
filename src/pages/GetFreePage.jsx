@@ -1,13 +1,14 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import ItemGrid from "../components/ItemGrid.jsx";
 import CategorySidebar from "../components/CategorySidebar.jsx";
-import { Link } from "react-router-dom";
 
 const GetFreePage = () => {
   const [selectedCategories, setSelectedCategories] = useState([]);
+  const [selectedPostType, setSelectedPostType] = useState("Offer");
 
   return (
-    <div className="text-white ">
+    <div>
       <div className="flex flex-col items-center">
         <Link
           to="/map"
@@ -16,13 +17,37 @@ const GetFreePage = () => {
           Map
         </Link>
       </div>
-      <div className="flex mt-2">
-        <CategorySidebar
-          selectedCategories={selectedCategories}
-          onCategoryChange={setSelectedCategories}
-        />
-        <div className="flex-1">
-          <ItemGrid selectedCategories={selectedCategories} />
+
+      {/* Layout for sidebar and content */}
+      <div className="flex flex-col md:flex-row">
+        {/* Sidebar column */}
+        <div className="md:w-1/4">
+          {/* Post Type Dropdown */}
+          <div className="px-4">
+            <h2 className="font-semibold text-lg text-black mb-2">Post type</h2>
+            <select
+              value={selectedPostType}
+              onChange={(e) => setSelectedPostType(e.target.value)}
+              className="w-61 px-4 py-1 rounded-md bg-gray-200 text-black text-sm"
+            >
+              <option value="Offer">Offer</option>
+              <option value="Request">Request</option>
+            </select>
+          </div>
+
+          {/* Category Sidebar */}
+          <CategorySidebar
+            selectedCategories={selectedCategories}
+            onCategoryChange={setSelectedCategories}
+          />
+        </div>
+
+        {/* Content area */}
+        <div>
+          <ItemGrid
+            selectedCategories={selectedCategories}
+            selectedPostType={selectedPostType}
+          />
         </div>
       </div>
     </div>
