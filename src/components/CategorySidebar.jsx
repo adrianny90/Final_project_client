@@ -35,8 +35,8 @@ const CategorySidebar = ({ selectedCategories, onCategoryChange }) => {
             className={`text-sm px-3 py-1 rounded-full text-left transition-colors
               ${
                 selectedCategories.includes(cat)
-                  ? "bg-blue-500 text-white"
-                  : "bg-gray-200 text-black hover:bg-blue-600"
+                  ? "bg-green-500 text-black"
+                  : "bg-gray-200 text-black hover:bg-green-500"
               }`}
           >
             {cat}
