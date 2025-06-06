@@ -104,7 +104,7 @@ const Map = ({ items = [], center, selectedItem, onItemSelect, radius, onCenterC
           : null;
         if (!position) return null;
 
-        const isSelected = selectedItem && selectedItem.id === item.id;
+        const isSelected = selectedItem && selectedItem._id === item._id;
         const isDefaultMarker = item.id === "default-marker";
 
         return (

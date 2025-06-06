@@ -164,7 +164,7 @@ const ItemMap = () => {
       {/* MAP */}
       <div className="map1">
         <Map
-          // key={`${position[0]}-${position[1]}-${selectedRadius}`}
+        
           items={filteredItems} //
           center={position}
           selectedItem={selectedItem}
