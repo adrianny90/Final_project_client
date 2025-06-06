@@ -1,4 +1,5 @@
 import { useContext, useEffect, useState } from "react";
+import { toast } from "react-toastify";
 import { AuthContext } from "../context/AuthContextProvider.jsx";
 import cloudinaryUpload from "../utils/cloudinaryUpload.js";
 import CategorySelect from "../components/CategorySelect";
@@ -41,10 +42,10 @@ const AddPost = () => {
 
       //upload limit = 5 photos
       if (formData.photos.length + selectedFiles.length > 5) {
-        setError("Max 5 photos possible");
+        toast.error("Maximum 5 photos are possible to upload");
         return;
       }
-      setError(null);
+      //setError(null);
 
       const newUrls = selectedFiles.map((file) => URL.createObjectURL(file));
 
@@ -81,22 +82,27 @@ const AddPost = () => {
     )}`;
     try {
       const response = await fetch(url);
-      const data = await response.json();
-
-      if (data.length === 0) {
-        throw new Error("No coordinates found for the given address");
+      if (!response.ok) {
+        throw new Error(`Network response was not ok: ${response.statusText}`);
       }
+
+      const data = await response.json();
+      if (data.length === 0) {
+        toast.error("No coordinates found for the given address");
+        return null;
+      }
+
       const { lat, lon } = data[0];
       return [parseFloat(lon), parseFloat(lat)];
     } catch (error) {
-      console.error("Error fetching coordinates");
-      throw new Error("Failed to fetch coordinates for adress");
+      toast.error(error.message || "Error fetching coordinates");
+      return null;
     }
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    setError(null);
+    //setError(null);
 
     try {
       setIsSubmitting(true);
@@ -152,10 +158,9 @@ const AddPost = () => {
       });
 
       setPreviewUrls([]);
-      alert("Item submitted successfully!");
+      toast.success("Item submitted successfully!");
     } catch (error) {
-      console.error("Error while submitting:", error);
-      setError(error.message || "Something went wrong while submitting.");
+      toast.error(error.message || "Something went wrong while submitting.");
     } finally {
       setIsSubmitting(false);
     }
@@ -178,7 +183,7 @@ const AddPost = () => {
               checked={formData.postType === "Offer"}
               onChange={handleChange}
               disabled={isSubmitting}
-              className=""
+              className="custom-radio"
             />
             <span>Offer</span>
           </label>
@@ -190,7 +195,7 @@ const AddPost = () => {
               checked={formData.postType === "Request"}
               onChange={handleChange}
               disabled={isSubmitting}
-              className=""
+              className="custom-radio"
             />
             <span>Request</span>
           </label>
@@ -237,7 +242,7 @@ const AddPost = () => {
         {/* Photo Upload */}
         <PhotoUpload
           previewUrls={previewUrls}
-          error={error}
+          //error={error}
           onChange={handleChange}
         />
 

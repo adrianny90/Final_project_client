@@ -28,7 +28,7 @@ const GetFreePage = () => {
             <select
               value={selectedPostType}
               onChange={(e) => setSelectedPostType(e.target.value)}
-              className="w-61 px-4 py-1 rounded-md bg-gray-200 text-black text-sm"
+              className="w-61 px-4 py-1 rounded-md bg-green-500 text-black text-sm"
             >
               <option value="Offer">Offer</option>
               <option value="Request">Request</option>
