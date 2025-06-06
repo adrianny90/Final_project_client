@@ -30,7 +30,8 @@ const HighlightIcon = L.icon({
 });
 
 
-const Map = ({ items = [], center, selectedItem, onItemSelect, radius, onCenterChange, onMapClick }) => {
+const Map = ({ items = [],circleCenter, center, selectedItem, onItemSelect, radius,
+   onCircleCenterChange, onMapClick }) => {
   const [map, setMap] = useState(null);
   // const [currentCenter, setCurrentCenter] = useState(center || [52.5200, 13.4050]);
 
@@ -47,17 +48,17 @@ const Map = ({ items = [], center, selectedItem, onItemSelect, radius, onCenterC
   const displayItems = items.length > 0
     ? items
     : [{
-        id: "default-marker",
+        _id: "default-marker",
         name: "Berlin",
         title: "Willkommen in Berlin!",
-        description: "drag and drop to get a new address",
+        description: "Get free Items and help saving the planet",
         location: { coordinates: [13.4050, 52.5200] },
       }];
       //Center for distance
   const handleDrag = (e) => {
     const newCenter = e.target.getLatLng();
-    if (onCenterChange) {
-      onCenterChange([newCenter.lat, newCenter.lng]);
+    if (onCircleCenterChange) {
+      onCircleCenterChange([newCenter.lat, newCenter.lng]);
     }
   };
 
@@ -83,12 +84,12 @@ const Map = ({ items = [], center, selectedItem, onItemSelect, radius, onCenterC
       {radius && center &&(
         <>
           <Circle
-            center={center}
+            center={circleCenter}
             radius={parseInt(radius)}
             pathOptions={{ color: "blue", fillColor: "#a3cfff", fillOpacity: 0.3 }}
           />
           <Marker
-            position={center}
+            position={circleCenter}
             draggable={true}
             eventHandlers={{ dragend: handleDrag }}
             icon={circleIcon}
@@ -105,7 +106,7 @@ const Map = ({ items = [], center, selectedItem, onItemSelect, radius, onCenterC
         if (!position) return null;
 
         const isSelected = selectedItem && selectedItem._id === item._id;
-        const isDefaultMarker = item.id === "default-marker";
+        const isDefaultMarker = item._id === "default-marker";
 
         return (
           <Marker
