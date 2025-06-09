@@ -20,10 +20,8 @@ const MyItemInPanel = ({ showDetails, setShowDetails, item }) => {
         <div className="w-full h-56 sm:h-72 bg-gray-300 rounded-lg flex items-center justify-center overflow-hidden">
           <img
             src={
-              Array.isArray(item.photos)
-                ? item.photos[0]
-                : item.photos ||
-                  "https://th.bing.com/th/id/OIP.e792CYPCRH59y_rdvSpfPAHaF8?rs=1&pid=ImgDetMain"
+              item.photos?.[0] ||
+              "https://th.bing.com/th/id/OIP.e792CYPCRH59y_rdvSpfPAHaF8?rs=1&pid=ImgDetMain"
             }
             alt={item.title || "Item image"}
             className="w-full h-full object-contain"
