@@ -1,4 +1,5 @@
 import axios from 'axios';
+import heic2any from "heic2any"
 
 const cloudinaryUpload = async(files)=>{
     const uploadedUrls = [];
@@ -22,5 +23,5 @@ const cloudinaryUpload = async(files)=>{
     }
     return uploadedUrls;
 };
-
 export default cloudinaryUpload;
+
