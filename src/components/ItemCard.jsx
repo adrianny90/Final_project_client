@@ -14,7 +14,7 @@ const ItemCard = ({ item }) => {
   const PostTypeIcon = item.postType === "Offer" ? Gift : FilePen;
 
   return (
-    <div className="bg-gray-200 rounded-xl overflow-hidden text-black shadow hover:shadow-md transition duration-300">
+    <div className="bg-gray-200 rounded-xl overflow-hidden text-black shadow hover:shadow-md transition duration-300 h-[350px] ">
       <img
         src={item.photos?.[0] ?? "/image/no-image.avif"}
         alt={item.title}
