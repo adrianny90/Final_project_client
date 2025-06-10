@@ -259,7 +259,9 @@ const MessagePanel = ({ showMessage }) => {
                   }`}
                 >
                   {item.userId === user._id ? (
-                    <p className="bg-green-500 m-2 p-2">This is your item</p>
+                    <p className="bg-gray-400 rounded-full m-2 p-2">
+                      This is your item
+                    </p>
                   ) : (
                     <></>
                   )}
