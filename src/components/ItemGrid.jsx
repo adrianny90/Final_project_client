@@ -38,7 +38,12 @@ const ItemGrid = ({ selectedCategories, selectedPostType = "Offer" }) => {
     fetchItems();
   }, [selectedCategories, selectedPostType]);
 
-  if (loading) return <Spinner />;
+  if (loading)
+    return (
+      <div>
+        <Spinner />
+      </div>
+    );
   if (error) return <div className="text-red-500 text-center">{error}</div>;
 
   if (items.length === 0)
