@@ -153,7 +153,7 @@ const ItemDetails = () => {
 
       <div className="flex flex-wrap items-center text-md text-gray-700 gap-2 mt-2 px-4 gap-x-2 gap-y-1">
         <Clock className="w-5 h-5" />
-        <span>Collection Time: {formatDateTime(item.collectionTime)}</span>
+        <span>Collection Time: {item.collectionTime}</span>
       </div>
 
       <div className="text-black mt-4 px-4">
