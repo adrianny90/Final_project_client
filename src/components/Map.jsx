@@ -1,5 +1,6 @@
+// Map.jsx
 import { useState, useEffect } from "react";
-import { MapContainer, TileLayer, Marker, Popup, Circle } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup, Circle, useMap } from "react-leaflet"; // Import useMap hook
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import markerIcon from "leaflet/dist/images/marker-icon.png";
@@ -29,21 +30,34 @@ const HighlightIcon = L.icon({
   className: "highlight-marker",
 });
 
-
-const Map = ({ items = [],circleCenter, center, selectedItem, onItemSelect, radius,
-   onCircleCenterChange, onMapClick }) => {
-  const [map, setMap] = useState(null);
-  // const [currentCenter, setCurrentCenter] = useState(center || [52.5200, 13.4050]);
-
-
+// A new component to handle map movement
+function MapMover({ center, circleCenter }) {
+  const map = useMap(); // Get the map instance
 
   useEffect(() => {
-    if (map && center) {
+    if (!map) return;
+
+    // Prioritize circleCenter for address search and draggable circle
+    if (circleCenter && (circleCenter[0] !== map.getCenter().lat || circleCenter[1] !== map.getCenter().lng)) {
+      map.flyTo(circleCenter, 13, {
+        duration: 1,
+      });
+    } else if (center && (center[0] !== map.getCenter().lat || center[1] !== map.getCenter().lng)) {
+      // Fallback to center for item selection, if not already at circleCenter
       map.flyTo(center, 15, {
         duration: 1,
       });
     }
-  }, [map, center]);
+  }, [map, center, circleCenter]); // Depend on map, center, and circleCenter
+
+  return null; // This component doesn't render anything
+}
+
+
+const Map = ({ items = [], circleCenter, center, selectedItem, onItemSelect, radius,
+   onCircleCenterChange, onMapClick }) => {
+  // We no longer need the local `map` state here, as MapMover handles it with useMap
+  // const [map, setMap] = useState(null); 
 
   const displayItems = items.length > 0
     ? items
@@ -54,7 +68,7 @@ const Map = ({ items = [],circleCenter, center, selectedItem, onItemSelect, radi
         description: "Get free Items and help saving the planet",
         location: { coordinates: [13.4050, 52.5200] },
       }];
-      //Center for distance
+      
   const handleDrag = (e) => {
     const newCenter = e.target.getLatLng();
     if (onCircleCenterChange) {
@@ -68,7 +82,7 @@ const Map = ({ items = [],circleCenter, center, selectedItem, onItemSelect, radi
       center={center}
       zoom={13}
       scrollWheelZoom={false}
-      whenCreated={setMap}
+      
       eventHandlers={{
         click: (e) => {
           if (onMapClick) {
@@ -77,11 +91,14 @@ const Map = ({ items = [],circleCenter, center, selectedItem, onItemSelect, radi
         },
       }}
     >
+      {/* MapMover component will handle flyTo */}
+      <MapMover center={center} circleCenter={circleCenter} />
+
       <TileLayer
         attribution='© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-      {radius && center &&(
+      {radius && circleCenter && ( // Changed from 'center' to 'circleCenter' here as well, if circle is tied to that state
         <>
           <Circle
             center={circleCenter}
