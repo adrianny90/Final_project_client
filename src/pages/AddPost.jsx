@@ -72,6 +72,15 @@ const AddPost = () => {
     }
   };
 
+  //delete photos
+const handleRemovePhoto = (indexToRemove) => {
+  setFormData((prev) => ({
+    ...prev,
+    photo:prev.photos.filter((_,i)=> i !== indexToRemove),
+  }));
+  setPreviewUrls((prev) => prev.filter((_,i)=> i !== indexToRemove));
+};
+
   //transforming address to coordinates and transforming into geojson
   const getCoordinatesFromAddress = async () => {
     const { street, houseStreet, postalCode, city } = formData.address;
@@ -244,6 +253,7 @@ const AddPost = () => {
           previewUrls={previewUrls}
           //error={error}
           onChange={handleChange}
+          onRemove={handleRemovePhoto}
         />
 
         {/* Collection Time */}

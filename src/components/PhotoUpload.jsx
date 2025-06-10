@@ -1,4 +1,6 @@
-const PhotoUpload = ({ previewUrls, error, onChange }) => (
+
+
+const PhotoUpload = ({ previewUrls, error, onChange,onRemove }) => (
   <div className="mb-6">
     <label htmlFor="photos" className="block text-black -mt-1.5">
       Add Photo (optional)
@@ -16,12 +18,22 @@ const PhotoUpload = ({ previewUrls, error, onChange }) => (
 
     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
       {previewUrls.map((url, index) => (
+        <div key={index} className="relative">
         <img
-          key={index}
+          // key={index}
           src={url}
           alt={`Preview ${index + 1}`}
           className="w-full h-32 object-cover rounded-md shadow-md"
         />
+        <button 
+          type="button"
+          onClick={()=> onRemove(index)}
+          className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm hover:bg-red-700"
+          aria-label="Remove photo"
+          >
+            x
+          </button>
+          </div>
       ))}
     </div>
   </div>
