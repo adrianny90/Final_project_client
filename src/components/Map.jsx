@@ -38,27 +38,34 @@ const HighlightIcon = L.icon({
 });
 
 // A new component to handle map movement
-// function MapMover({ center, circleCenter }) {
-//   const map = useMap(); // Get the map instance
+function MapMover({ center, circleCenter }) {
+  const map = useMap(); // Get the map instance
 
-//   useEffect(() => {
-//     if (!map) return;
+  useEffect(() => {
+    if (!map) return;
 
-//     // Prioritize circleCenter for address search and draggable circle
-//     if (circleCenter && (circleCenter[0] !== map.getCenter().lat || circleCenter[1] !== map.getCenter().lng)) {
-//       map.flyTo(circleCenter, 13, {
-//         duration: 1,
-//       });
-//     } else if (center && (center[0] !== map.getCenter().lat || center[1] !== map.getCenter().lng)) {
-//       // Fallback to center for item selection, if not already at circleCenter
-//       map.flyTo(center, 15, {
-//         duration: 1,
-//       });
-//     }
-//   }, [map, center, circleCenter]); // Depend on map, center, and circleCenter
+    // Prioritize circleCenter for address search and draggable circle
+    if (
+      circleCenter &&
+      (circleCenter[0] !== map.getCenter().lat ||
+        circleCenter[1] !== map.getCenter().lng)
+    ) {
+      map.flyTo(circleCenter, 13, {
+        duration: 1,
+      });
+    } else if (
+      center &&
+      (center[0] !== map.getCenter().lat || center[1] !== map.getCenter().lng)
+    ) {
+      // Fallback to center for item selection, if not already at circleCenter
+      map.flyTo(center, 15, {
+        duration: 1,
+      });
+    }
+  }, [map, circleCenter]); // Depend on map, center, and circleCenter   center,
 
-//   return null; // This component doesn't render anything
-// }
+  return null; // This component doesn't render anything
+}
 
 const Map = ({
   items = [],
@@ -108,7 +115,7 @@ const Map = ({
       }}
     >
       {/* MapMover component will handle flyTo */}
-      {/* <MapMover center={center} circleCenter={circleCenter} /> */}
+      <MapMover center={center} circleCenter={circleCenter} />
 
       <TileLayer
         attribution='© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
