@@ -26,7 +26,9 @@ const CategorySidebar = ({ selectedCategories, onCategoryChange }) => {
 
   return (
     <div className="bg-white rounded-2xl text-black m-4 w-61">
-      <h2 className="font-semibold text-lg mb-4">Categories</h2>
+      <h2 className="flex justify-center font-semibold text-md mb-4">
+        Categories
+      </h2>
       <div className="flex flex-col space-y-2">
         {categories.map((cat, idx) => (
           <button

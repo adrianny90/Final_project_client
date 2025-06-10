@@ -19,31 +19,39 @@ const GetFreePage = () => {
       </div>
 
       {/* Layout for sidebar and content */}
-      <div className="flex flex-col md:flex-row">
+      <div className="flex flex-col md:flex-row lg:flex-row">
         {/* Sidebar column */}
-        <div className="md:w-1/4">
+        <div className="">
           {/* Post Type Dropdown */}
           <div className="px-4">
-            <h2 className="font-semibold text-lg text-black mb-2">Post type</h2>
-            <select
-              value={selectedPostType}
-              onChange={(e) => setSelectedPostType(e.target.value)}
-              className="w-61 px-4 py-1 rounded-md bg-green-500 text-black text-sm"
-            >
-              <option value="Offer">Offer</option>
-              <option value="Request">Request</option>
-            </select>
+            <div className="flex justify-center">
+              <h2 className="font-semibold text-md text-black mb-2">
+                Post type
+              </h2>
+            </div>
+            <div className="flex justify-center">
+              <select
+                value={selectedPostType}
+                onChange={(e) => setSelectedPostType(e.target.value)}
+                className="w-61 px-4 py-1 rounded-md bg-gray-200 text-black text-sm"
+              >
+                <option value="Offer">Offer</option>
+                <option value="Request">Request</option>
+              </select>
+            </div>
           </div>
 
           {/* Category Sidebar */}
-          <CategorySidebar
-            selectedCategories={selectedCategories}
-            onCategoryChange={setSelectedCategories}
-          />
+          <div className="flex justify-center truncate whitespace-nowrap">
+            <CategorySidebar
+              selectedCategories={selectedCategories}
+              onCategoryChange={setSelectedCategories}
+            />
+          </div>
         </div>
 
         {/* Content area */}
-        <div>
+        <div className="flex justify-center">
           <ItemGrid
             selectedCategories={selectedCategories}
             selectedPostType={selectedPostType}
