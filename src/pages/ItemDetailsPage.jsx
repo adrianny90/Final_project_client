@@ -105,7 +105,7 @@ const ItemDetails = () => {
     <div className="max-w-3xl mx-auto p-2  bg-gray-200 rounded-xl overflow-hidden">
       <div className="relative w-full h-56 sm:h-72 bg-gray-300 rounded-lg">
         <img
-          src={item?.photos?.[currentImage] || "/image/item.jpg"}
+          src={item?.photos?.[currentImage] || "/image/no-image.avif"}
           className="w-full h-full object-contain"
         />
         {item.photos.length > 1 && (
