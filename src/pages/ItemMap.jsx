@@ -93,6 +93,7 @@ const ItemMap = () => {
     try {
       setLoading(true);
       const query = `${address.street} ${address.number}, ${address.postalCode} ${address.city}`;
+      console.log('Address query:', query)
       const results = await osmProvider.search({ query });
 
       if (results.length > 0) {
