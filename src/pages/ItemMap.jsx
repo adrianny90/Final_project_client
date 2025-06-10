@@ -75,12 +75,12 @@ const ItemMap = () => {
   const handleItemSelect = (item) => {
     if (item._id === "default-marker") return;
     setSelectedItem(item);
-    if (item?.address?.location?.coordinates) {
-      setPosition([
-        item.address.location.coordinates[1], // lat
-        item.address.location.coordinates[0], // lng
-      ]);
-    }
+    // if (item?.address?.location?.coordinates) {
+    //   setPosition([
+    //     item.address.location.coordinates[1], // lat
+    //     item.address.location.coordinates[0], // lng
+    //   ]);
+    // } not needed anymore...movemap doing the job now
   };
 
 
@@ -100,6 +100,13 @@ const ItemMap = () => {
         const { x: lon, y: lat } = results[0];
         setPosition([lat, lon]);
         setCircleCenter([lat, lon]);
+        setSelectedItem(null);
+        setAddress({
+          street: "",
+          number: "",
+          postalCode: "",
+          city: "",
+      })
       } else {
         alert("Address not found");
       }

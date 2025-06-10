@@ -1,5 +1,5 @@
 // Map.jsx
-import { useState, useEffect } from "react";
+import { useState, useEffect,useRef } from "react";
 import { MapContainer, TileLayer, Marker, Popup, Circle, useMap } from "react-leaflet"; // Import useMap hook
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
@@ -31,27 +31,40 @@ const HighlightIcon = L.icon({
 });
 
 // A new component to handle map movement
-function MapMover({ center, circleCenter }) {
+function MapMover({ center, circleCenter,selectedItem }) {
   const map = useMap(); // Get the map instance
+  const lastChangeBy = useRef(null);
+
+useEffect(() => {
+  if(selectedItem){
+    lastChangeBy.current = 'item';
+  }
+},[selectedItem]);
+
+useEffect(()=> {
+  if(circleCenter) {
+    lastChangeBy.current = "circle";
+  }
+},[circleCenter]);
+
 
   useEffect(() => {
     if (!map) return;
+    const changedBy = lastChangeBy.current;
 
-    // Prioritize circleCenter for address search and draggable circle
-    if (circleCenter && (circleCenter[0] !== map.getCenter().lat || circleCenter[1] !== map.getCenter().lng)) {
-      map.flyTo(circleCenter, 13, {
-        duration: 1,
-      });
-    } else if (center && (center[0] !== map.getCenter().lat || center[1] !== map.getCenter().lng)) {
-      // Fallback to center for item selection, if not already at circleCenter
-      map.flyTo(center, 15, {
-        duration: 1,
-      });
+    if (changedBy === "item" && selectedItem?.address?.location?.coordinates) {
+      const [lng, lat] = selectedItem.address.location.coordinates;
+      map.flyTo([lat, lng], 15, { duration: 1 });
+    } else if (changedBy === "circle" && circleCenter) {
+      map.flyTo(circleCenter, 13, { duration: 1 });
+    } else if (center) {
+      map.flyTo(center, 13, { duration: 1 });
     }
-  }, [map, center, circleCenter]); // Depend on map, center, and circleCenter
+  }, [map, center, circleCenter, selectedItem]);
 
-  return null; // This component doesn't render anything
+  return null;
 }
+
 
 
 const Map = ({ items = [], circleCenter, center, selectedItem, onItemSelect, radius,
@@ -92,7 +105,7 @@ const Map = ({ items = [], circleCenter, center, selectedItem, onItemSelect, rad
       }}
     >
       {/* MapMover component will handle flyTo */}
-      <MapMover center={center} circleCenter={circleCenter} />
+      <MapMover center={center} circleCenter={circleCenter} selectedItem={selectedItem}/>
 
       <TileLayer
         attribution='© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
