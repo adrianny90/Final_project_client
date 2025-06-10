@@ -73,6 +73,7 @@ const PersonalDataPanel = () => {
           <span className="text-gray-300 text-sm sm:text-base">Email:</span>
           <input
             name="email"
+            disabled
             value={user.email || ""}
             onChange={handleChange}
             className="mt-1 w-full p-2 bg-gray-700 text-white border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 text-sm sm:text-base"

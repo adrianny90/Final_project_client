@@ -3,6 +3,8 @@ import { Link, Navigate, useNavigate } from "react-router-dom";
 import { signIn } from "../utils/auth.js";
 import { useAuth } from "../hooks/useAuth.js";
 import { toast } from "react-toastify";
+import { GoogleLogin } from "@react-oauth/google";
+import { jwtDecode } from "jwt-decode";
 
 const Login = () => {
   const [{ email, password }, setForm] = useState({
@@ -44,7 +46,35 @@ const Login = () => {
       setLoading(false);
     }
   };
+  const handleSuccess = async (credentialResponse) => {
+    console.log("Credential Response:", credentialResponse);
+    const decoded = jwtDecode(credentialResponse.credential);
+    console.log("Decoded User Info:", decoded);
+    try {
+      const data = await signIn(decoded);
+      if (data.message === "Successfully logged in") {
+        toast.success("Welcome back, you’re in! 😎", {
+          ariaLabel: "Login success",
+        });
+      } else {
+        console.log(data, "data");
+        toast.error("Login failed, check your credentials! 😕", {
+          ariaLabel: "Login error",
+        });
+      }
 
+      setUser(data.userResponse);
+
+      if (user?.userResponse) navigate("/");
+    } catch (error) {
+      console.log(data, "data");
+      toast.error("Login failed, check your credentials! 😕", {
+        ariaLabel: "Login error",
+      });
+    }
+
+    // Example: Send credential to backend or update auth context
+  };
   if (user) return <Navigate to="/" />;
 
   return (
@@ -54,6 +84,13 @@ const Login = () => {
     >
       <div className="max-w-md w-full flex flex-col gap-4 m-4 items-center text-white">
         <p className="text-3xl mt-6">Please log in!</p>
+        <GoogleLogin
+          onSuccess={handleSuccess}
+          onError={() => {
+            console.log("login failed");
+          }}
+          ux_mode="popup"
+        />
         <label className="input input-bordered flex items-center gap-2 bg-gray-700 border-gray-600 m-3">
           <svg
             xmlns="http://www.w3.org/2000/svg"

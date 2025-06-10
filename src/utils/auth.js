@@ -20,6 +20,8 @@ export const signIn = async (formData) => {
     body: JSON.stringify(formData),
     credentials: "include",
   });
+  console.log("formData", formData);
+
   if (!res) throw new Error("Error while signing in");
   const data = await res.json();
   return data;
