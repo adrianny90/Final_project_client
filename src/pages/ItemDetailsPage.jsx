@@ -82,7 +82,9 @@ const ItemDetails = () => {
       setMessage("");
     } catch (error) {
       console.error("Failed to send message:", error);
-      alert("Error sending message.");
+      toast.error("Failed to send a message, please log in first! 😕", {
+        ariaLabel: "Message error",
+      });
     } finally {
       setSending(false);
     }
