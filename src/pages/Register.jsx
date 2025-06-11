@@ -34,11 +34,13 @@ const Register = () => {
 
       setLoading(true);
       const res = await signUp({ firstName, lastName, email, password });
-      if (res.message === "User with such email already exists.") {
+      if (res.message === "User with such email already exists") {
         toast.error("User with such email already exists! 😕", {
           ariaLabel: "Login error",
         });
       } else {
+        console.log("response", res.message);
+
         toast.success("You are almost with us, please verify your email! 😎", {
           ariaLabel: "Registration successful",
         });
